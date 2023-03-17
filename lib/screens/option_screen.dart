@@ -21,23 +21,27 @@ class OptionScreen extends StatefulWidget {
 
 class _OptionScreenState extends State<OptionScreen> {
 
-  signInwithGoogle() async {
-  try{
-    final googleSignIn=GoogleSignIn();
-    final user=await googleSignIn.signIn();
-
-    //check whether user has any data
-    if(user!=null){
-      print('username +${user.displayName}');
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(name: user.displayName.toString(),)));
-    }else{
-      toastMessages('Sign In Failed!', false);
-    }
-
-  }catch(e){
-    toastMessages(e.toString(), false);
+  _handleGoogleBtn(){
+    _signInWithGoogle().then((user) =>
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeScreen(name: 'Harsh')))
+    );
   }
 
+  Future<UserCredential> _signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,7 @@ class _OptionScreenState extends State<OptionScreen> {
               SizedBox(height: mq.height*.02,),
 
               ElevButton(text: 'Sign up with Google',
-                  onPress: signInwithGoogle,
+                  onPress: _handleGoogleBtn,
                   icon:'assets/images/googleimg.png' ),
 
              Row(

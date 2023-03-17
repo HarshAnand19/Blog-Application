@@ -2,6 +2,7 @@ import 'package:blog_app/screens/add_posts.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/signIn.dart';
+import 'package:blog_app/screens/view_posts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -92,85 +93,105 @@ class _HomeScreenState extends State<HomeScreen> {
                    DataSnapshot snapshot, Animation<double> animation, int index) {
 
                       String tempTitle=snapshot.child('pTitle').value.toString();
+
+                      //passing data to viewposts screen
+                      String title1=snapshot.child('pTitle').value.toString();
+                      String desc1=snapshot.child('pDesc').value.toString();
+                      String pic=snapshot.child('pImage').value.toString();
+
                       if(searchController.text.isEmpty){
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade100,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                        return InkWell(
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context)=>
+                         ViewPosts(title: title1,desc:desc1,photo: pic,)));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
 
-                                //fetching the details from server(post image + post title + post desc)
-                                ClipRRect(
-                                  borderRadius:BorderRadius.circular(10),
-                                  child: FadeInImage.assetNetwork(
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width * 1,
-                                      height: MediaQuery.of(context).size.height * .25,
-                                      placeholder: 'assets/images/firebase.png',
-                                      image:snapshot.child('pImage').value.toString()),
-                                ),
-                                SizedBox(height: 10,),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(snapshot.child('pTitle').value.toString(),
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                  //fetching the details from server(post image + post title + post desc)
+                                  ClipRRect(
+                                    borderRadius:BorderRadius.circular(10),
+                                    child: FadeInImage.assetNetwork(
+                                        fit: BoxFit.cover,
+                                        width: MediaQuery.of(context).size.width * 1,
+                                        height: MediaQuery.of(context).size.height * .25,
+                                        placeholder: 'assets/images/firebase.png',
+                                        image:snapshot.child('pImage').value.toString()),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(snapshot.child('pDesc').value.toString(),
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                                  SizedBox(height: 10,),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(snapshot.child('pTitle').value.toString(),
+                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(snapshot.child('pDesc').value.toString(),
+                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
 
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
 
                       }else if(tempTitle.toLowerCase().contains(searchController.text.toLowerCase().toString())){
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade100,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                        return InkWell(
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context)=>
+                            ViewPosts(title: title1,desc:desc1,photo: pic,)));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
 
-                                //fetching the details from server(post image + post title + post desc)
-                                ClipRRect(
-                                  borderRadius:BorderRadius.circular(10),
-                                  child: FadeInImage.assetNetwork(
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width * 1,
-                                      height: MediaQuery.of(context).size.height * .25,
-                                      placeholder: 'assets/images/firebase.png',
-                                      image:snapshot.child('pImage').value.toString()),
-                                ),
-                                SizedBox(height: 10,),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(snapshot.child('pTitle').value.toString(),
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                  //fetching the details from server(post image + post title + post desc)
+                                  ClipRRect(
+                                    borderRadius:BorderRadius.circular(10),
+                                    child: FadeInImage.assetNetwork(
+                                        fit: BoxFit.cover,
+                                        width: MediaQuery.of(context).size.width * 1,
+                                        height: MediaQuery.of(context).size.height * .25,
+                                        placeholder: 'assets/images/firebase.png',
+                                        image:snapshot.child('pImage').value.toString()),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(snapshot.child('pDesc').value.toString(),
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                                  SizedBox(height: 10,),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(snapshot.child('pTitle').value.toString(),
+                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(snapshot.child('pDesc').value.toString(),
+                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -179,8 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
 
                     },
-
-
                   ) ,
               )
             ],

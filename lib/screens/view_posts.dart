@@ -21,26 +21,40 @@ class _ViewPostsState extends State<ViewPosts> {
           centerTitle: true,
           automaticallyImplyLeading: true,
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius:BorderRadius.circular(10),
-              child: FadeInImage.assetNetwork(
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: MediaQuery.of(context).size.height * .25,
-                  placeholder: 'assets/images/firebase.png',
-                  image:widget.photo
-            ),
-            ),
-            Text(widget.title,style: TextStyle(fontSize: 21,color: Colors.black),),
+        body: SingleChildScrollView(
 
-            SizedBox(height: 20,),
+          child: Column(
 
-            Text(widget.desc,style: TextStyle(fontSize: 21,color: Colors.blue),),
-          ],
+            children: [
+
+              Center(
+                child: ClipRRect(
+                  borderRadius:BorderRadius.circular(0.0),
+                  child: FadeInImage.assetNetwork(
+                      fit: BoxFit.contain,
+                      width: MediaQuery.of(context).size.width * 1 ,
+                      height: MediaQuery.of(context).size.height * .4,
+                      placeholder: 'assets/images/firebase.png',
+                      image:widget.photo
+                ),
+                ),
+              ),
+
+              SizedBox(height:MediaQuery.of(context).size.height*.05),
+              Column(
+                children: [
+                  Text(widget.title,style: TextStyle(fontSize: 30,color: Colors.black,fontWeight: FontWeight.bold),),
+
+                  SizedBox(height: 20,),
+
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(widget.desc,style: TextStyle(fontSize: 18,color: Colors.black87),)),
+                ],
+              )
+
+            ],
+          ),
         ),
       ),
     );

@@ -102,17 +102,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       if(searchController.text.isEmpty){
                         return InkWell(
                           onTap: (){
+                            FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context)=>
                          ViewPosts(title: title1,desc:desc1,photo: pic,)));
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              color: Colors.grey.shade200,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              elevation: 2.5,
+                              borderOnForeground: true,
+
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,46 +153,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       }else if(tempTitle.toLowerCase().contains(searchController.text.toLowerCase().toString())){
                         return InkWell(
                           onTap: (){
+                            FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context)=>
                             ViewPosts(title: title1,desc:desc1,photo: pic,)));
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              color: Colors.grey.shade200,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              elevation: 2.5,
+                              borderOnForeground: true,
 
-                                  //fetching the details from server(post image + post title + post desc)
-                                  ClipRRect(
-                                    borderRadius:BorderRadius.circular(10),
-                                    child: FadeInImage.assetNetwork(
-                                        fit: BoxFit.cover,
-                                        width: MediaQuery.of(context).size.width * 1,
-                                        height: MediaQuery.of(context).size.height * .25,
-                                        placeholder: 'assets/images/firebase.png',
-                                        image:snapshot.child('pImage').value.toString()),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(snapshot.child('pTitle').value.toString(),
-                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
+                                    //fetching the details from server(post image + post title + post desc)
+                                    ClipRRect(
+                                      borderRadius:BorderRadius.circular(10),
+                                      child: FadeInImage.assetNetwork(
+                                          fit: BoxFit.cover,
+                                          width: MediaQuery.of(context).size.width * 1,
+                                          height: MediaQuery.of(context).size.height * .25,
+                                          placeholder: 'assets/images/firebase.png',
+                                          image:snapshot.child('pImage').value.toString()),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(snapshot.child('pDesc').value.toString(),
-                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                                    SizedBox(height: 10,),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Text(snapshot.child('pTitle').value.toString(),
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Text(snapshot.child('pDesc').value.toString(),
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

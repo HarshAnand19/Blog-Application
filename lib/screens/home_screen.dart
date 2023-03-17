@@ -42,12 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           actions: [
 
-            //add posts button
-            IconButton(icon: Icon(Icons.add),onPressed: (){
-Navigator.push(context,MaterialPageRoute(builder: (context)=>AddPostScreen()));
-            }),
-
-            SizedBox(width:10),
             //logout button
             IconButton(icon: Icon(Icons.logout),onPressed: () async {
 
@@ -191,6 +185,13 @@ Navigator.push(context,MaterialPageRoute(builder: (context)=>AddPostScreen()));
               )
             ],
           ),
+        ),
+
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>AddPostScreen()));
+          },
+          child: Icon(Icons.add),
         ),
 
       ),

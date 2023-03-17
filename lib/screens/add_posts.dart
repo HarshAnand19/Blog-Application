@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blog_app/components/round_button.dart';
+import 'package:blog_app/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -234,6 +235,7 @@ SizedBox(height: 12,),
 
                    }).then((value) {
                      toastMessages('Post  Uploaded Successfully!',true);
+                     Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user!.displayName.toString())));
                      setState(() {
                        showSpinner=false;
                      });

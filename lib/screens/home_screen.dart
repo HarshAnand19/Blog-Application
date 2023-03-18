@@ -98,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       String title1=snapshot.child('pTitle').value.toString();
                       String desc1=snapshot.child('pDesc').value.toString();
                       String pic=snapshot.child('pImage').value.toString();
+                        String id1 =snapshot.child('pId').value.toString();
 
                       if(searchController.text.isEmpty){
                         return InkWell(
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context)=>
-                         ViewPosts(title: title1,desc:desc1,photo: pic,)));
+                         ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,)));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -156,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context)=>
-                            ViewPosts(title: title1,desc:desc1,photo: pic,)));
+                            ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,)));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

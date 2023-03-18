@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class ViewPosts extends StatefulWidget {
   final String title;
@@ -55,26 +55,24 @@ class _ViewPostsState extends State<ViewPosts> {
                   IconButton(
                     icon: Icon(Icons.delete,color: Colors.red,),
                     onPressed: (){
-                      showDialog(context: context,builder: (context){
-                        return Container(
-                          child: AlertDialog(
-                            title: Text('Do you want to delete this post?'),
-                            actions: [
-                              TextButton(onPressed: (){
-                                 Navigator.pop(context);
-                                 postRef.child('Post List').child(widget.id).remove();
-                                 Navigator.pop(context);
-                              }, child:Text('YES')),
-                              TextButton(onPressed: (){
-                                Navigator.pop(context);
-                              }, child:Text('CANCEL')),
-                            ],
-                          ),
-                        );
-                      });
-
-                      // Navigator.pop(context);
-                      // postRef.child('Post List').child(widget.id).remove();
+                      // showDialog(context: context,builder: (context){
+                      //   return Container(
+                      //     child: AlertDialog(
+                      //       title: Text('Do you want to delete this post?'),
+                      //       actions: [
+                      //         TextButton(onPressed: (){
+                      //            Navigator.pop(context);
+                      //            postRef.child('Post List').child(widget.id).remove();
+                      //            Navigator.pop(context);
+                      //         }, child:Text('YES')),
+                      //         TextButton(onPressed: (){
+                      //           Navigator.pop(context);
+                      //         }, child:Text('CANCEL')),
+                      //       ],
+                      //     ),
+                      //   );
+                      // });
+                      _showDialog(context);
                     },
                   )
                   ],
@@ -93,5 +91,24 @@ class _ViewPostsState extends State<ViewPosts> {
         ),
       ),
     );
+
+
+  }
+
+  _showDialog(context){
+    AwesomeDialog(
+
+        context: context,
+        dialogType: DialogType.warning,
+        animType: AnimType.rightSlide,
+        title: 'Delete Post',
+        desc: 'Are you sure you want to delete this post',
+        btnCancelOnPress: () {
+        },
+    btnOkOnPress: () {
+      postRef.child('Post List').child(widget.id).remove();
+      Navigator.pop(context);
+    },
+    )..show();
   }
 }

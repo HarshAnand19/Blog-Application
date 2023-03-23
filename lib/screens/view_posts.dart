@@ -9,7 +9,9 @@ class ViewPosts extends StatefulWidget {
   final String desc;
  final String photo;
  final String id;
-   ViewPosts({Key? key,required this.title, required this.desc, required this.photo, required this.id}) : super(key: key);
+ final String date;
+ final String time;
+   ViewPosts({Key? key,required this.title, required this.desc, required this.photo, required this.id, required this.date, required this.time}) : super(key: key);
 
   @override
   State<ViewPosts> createState() => _ViewPostsState();
@@ -19,7 +21,6 @@ class _ViewPostsState extends State<ViewPosts> {
   firebase_storage.FirebaseStorage storage=firebase_storage.FirebaseStorage.instance;
   int date = DateTime.now().millisecondsSinceEpoch;
   final postRef = FirebaseDatabase.instance.reference().child('Posts');
-
 
 
   @override
@@ -51,45 +52,55 @@ class _ViewPostsState extends State<ViewPosts> {
               ),
 
               SizedBox(height:MediaQuery.of(context).size.height*.05),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                    Text(widget.title,style: TextStyle(fontSize: 30,color: Colors.black,fontWeight: FontWeight.bold),),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                      Text(widget.title,style: TextStyle(fontSize: 30,color: Colors.black,fontWeight: FontWeight.bold),),
 
-                  IconButton(
-                    icon: Icon(Icons.delete,color: Colors.red,),
-                    onPressed: (){
-                      // showDialog(context: context,builder: (context){
-                      //   return Container(
-                      //     child: AlertDialog(
-                      //       title: Text('Do you want to delete this post?'),
-                      //       actions: [
-                      //         TextButton(onPressed: (){
-                      //            Navigator.pop(context);
-                      //            postRef.child('Post List').child(widget.id).remove();
-                      //            Navigator.pop(context);
-                      //         }, child:Text('YES')),
-                      //         TextButton(onPressed: (){
-                      //           Navigator.pop(context);
-                      //         }, child:Text('CANCEL')),
-                      //       ],
-                      //     ),
-                      //   );
-                      // });
-                      _showDialog(context);
-                    },
-                  )
+                    IconButton(
+                      icon: Icon(Icons.delete,color: Colors.red,),
+                      onPressed: (){
+                        // showDialog(context: context,builder: (context){
+                        //   return Container(
+                        //     child: AlertDialog(
+                        //       title: Text('Do you want to delete this post?'),
+                        //       actions: [
+                        //         TextButton(onPressed: (){
+                        //            Navigator.pop(context);
+                        //            postRef.child('Post List').child(widget.id).remove();
+                        //            Navigator.pop(context);
+                        //         }, child:Text('YES')),
+                        //         TextButton(onPressed: (){
+                        //           Navigator.pop(context);
+                        //         }, child:Text('CANCEL')),
+                        //       ],
+                        //     ),
+                        //   );
+                        // });
+                        _showDialog(context);
+                      },
+                    )
+                    ],
+                    ),
+SizedBox(height: 8,),
+
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(widget.date,style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(widget.time,style: TextStyle(fontWeight: FontWeight.bold),),
+                            SizedBox(height: MediaQuery.of(context).size.height*.01,),
+                            Text(widget.desc,style: TextStyle(fontSize: 18,color: Colors.black87),),
+                          ],
+                        )),
                   ],
-                  ),
-
-                  SizedBox(height: 20,),
-
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(widget.desc,style: TextStyle(fontSize: 18,color: Colors.black87),)),
-                ],
+                ),
               )
 
             ],
@@ -113,6 +124,7 @@ class _ViewPostsState extends State<ViewPosts> {
         },
     btnOkOnPress: () {
             postRef.child('Post List').child(widget.id).remove();
+            final ref =storage.ref().child('PostImages/').child(widget.id).delete();
             Navigator.pop(context);
           }
     )..show();

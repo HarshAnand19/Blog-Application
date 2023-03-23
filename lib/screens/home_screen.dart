@@ -99,6 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       String desc1=snapshot.child('pDesc').value.toString();
                       String pic=snapshot.child('pImage').value.toString();
                         String id1 =snapshot.child('pId').value.toString();
+                        String date1=snapshot.child('uploadDate').value.toString();
+                          String time1=snapshot.child('uploadTime').value.toString();
+
 
                       if(searchController.text.isEmpty){
                         return InkWell(
@@ -106,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context)=>
-                         ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,)));
+                         ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -120,7 +123,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
+                                  
+                                  Padding(
+                                    padding: const EdgeInsets.all(7.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                            Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
+                                          ],
+                                        ),
+                                        Text(snapshot.child('uEmail').value.toString())
+                                      ],
+                                    ),
+                                  ),
                                   //fetching the details from server(post image + post title + post desc)
                                   ClipRRect(
                                     borderRadius:BorderRadius.circular(10),
@@ -152,12 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
 
                       }else if(tempTitle.toLowerCase().contains(searchController.text.toLowerCase().toString())){
+
                         return InkWell(
                           onTap: (){
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context)=>
-                            ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,)));
+                                    ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -167,41 +188,53 @@ class _HomeScreenState extends State<HomeScreen> {
                               elevation: 2.5,
                               borderOnForeground: true,
 
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
 
-                                    //fetching the details from server(post image + post title + post desc)
-                                    ClipRRect(
-                                      borderRadius:BorderRadius.circular(10),
-                                      child: FadeInImage.assetNetwork(
-                                          fit: BoxFit.cover,
-                                          width: MediaQuery.of(context).size.width * 1,
-                                          height: MediaQuery.of(context).size.height * .25,
-                                          placeholder: 'assets/images/firebase.png',
-                                          image:snapshot.child('pImage').value.toString()),
+                                  Padding(
+                                    padding: const EdgeInsets.all(7.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                            Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
+                                          ],
+                                        ),
+                                        Text(snapshot.child('uEmail').value.toString())
+                                      ],
                                     ),
-                                    SizedBox(height: 10,),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text(snapshot.child('pTitle').value.toString(),
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                      ),
+                                  ),
+                                  //fetching the details from server(post image + post title + post desc)
+                                  ClipRRect(
+                                    borderRadius:BorderRadius.circular(10),
+                                    child: FadeInImage.assetNetwork(
+                                        fit: BoxFit.cover,
+                                        width: MediaQuery.of(context).size.width * 1,
+                                        height: MediaQuery.of(context).size.height * .25,
+                                        placeholder: 'assets/images/firebase.png',
+                                        image:snapshot.child('pImage').value.toString()),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(snapshot.child('pTitle').value.toString(),
+                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text(snapshot.child('pDesc').value.toString(),
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
-                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(snapshot.child('pDesc').value.toString(),
+                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
                                     ),
-                                  ],
-                                ),
+                                  ),
+
+                                ],
                               ),
                             ),
                           ),

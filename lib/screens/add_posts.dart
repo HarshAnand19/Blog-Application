@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 
@@ -224,6 +225,11 @@ SizedBox(height: 12,),
                    // await Future.value(uploadTask);
                     var newUrl =await ref.getDownloadURL();
 
+                    var date1=DateTime.now();
+                    var postDateKey =DateFormat('MMM d,yyyy');
+                    var postTimeKey =DateFormat('EEEE,hh:mm aaa');
+                    String formatDate=postDateKey.format(date1);
+                    String formatTime=postTimeKey.format(date1);
                    //uploading post to firebase database
 
                    postRef.child('Post List').child(date.toString()).set({
@@ -235,6 +241,8 @@ SizedBox(height: 12,),
                        'pDesc':descController.text.toString(),
                        'uEmail':user?.email.toString(),
                        'uid':user?.uid.toString(),
+                        'uploadDate':formatDate.toString(),
+                        'uploadTime':formatTime.toString()
 
                    }).then((value) {
                      toastMessages('Post  Uploaded Successfully!',true);
@@ -243,7 +251,7 @@ SizedBox(height: 12,),
                        showSpinner=false;
                      });
                    }).onError((error, stackTrace){
-                     toastMessages(error.toString(),false);
+                    toastMessages(error.toString(), false);
                      setState(() {
                        showSpinner=false;
                      });

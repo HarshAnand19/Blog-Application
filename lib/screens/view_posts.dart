@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 
 class ViewPosts extends StatefulWidget {
   final String title;
@@ -14,8 +16,12 @@ class ViewPosts extends StatefulWidget {
 }
 
 class _ViewPostsState extends State<ViewPosts> {
-  final postRef = FirebaseDatabase.instance.reference().child('Posts');
+  firebase_storage.FirebaseStorage storage=firebase_storage.FirebaseStorage.instance;
   int date = DateTime.now().millisecondsSinceEpoch;
+  final postRef = FirebaseDatabase.instance.reference().child('Posts');
+
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -106,9 +112,9 @@ class _ViewPostsState extends State<ViewPosts> {
         btnCancelOnPress: () {
         },
     btnOkOnPress: () {
-      postRef.child('Post List').child(widget.id).remove();
-      Navigator.pop(context);
-    },
+            postRef.child('Post List').child(widget.id).remove();
+            Navigator.pop(context);
+          }
     )..show();
   }
 }

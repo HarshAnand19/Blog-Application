@@ -210,18 +210,21 @@ SizedBox(height: 12,),
 
                  try{
 
+                   final User? user=_auth.currentUser;
                    //uploading post to firebase storage
                    int date = DateTime.now().millisecondsSinceEpoch;
 
                    //uploading image to firebase storage
-                   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
-                   UploadTask uploadTask =ref.putFile(_image!.absolute);
+                   final ref =storage.ref().child('PostImages/$date');
+                   UploadTask uploadTask=ref.putFile(_image!.absolute);
                    await Future.value(uploadTask);
-                   var newUrl =await ref.getDownloadURL();
+
+                   // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
+                   // UploadTask uploadTask =ref.putFile(_image!.absolute);
+                   // await Future.value(uploadTask);
+                    var newUrl =await ref.getDownloadURL();
 
                    //uploading post to firebase database
-                   final User? user=_auth.currentUser;
-
 
                    postRef.child('Post List').child(date.toString()).set({
 

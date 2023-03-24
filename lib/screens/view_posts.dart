@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class ViewPosts extends StatefulWidget {
   final String title;

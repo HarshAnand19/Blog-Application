@@ -109,16 +109,14 @@ SizedBox(height: 8,),
   }
 
  void _sharefiles() async{
-    String doc ="Title - ${widget.title}\n Description - ${widget.desc} ";
+    String doc ="Hey! Checkout this blog, \n Title - ${widget.title}\n Description - ${widget.desc} ";
    http.Response response = await http.get(Uri.parse(widget.photo));
    final directory = await getTemporaryDirectory();
    final path = directory.path;
    final file = File('$path/image.png');
    file.writeAsBytes(response.bodyBytes);
-   Share.shareFiles(['$path/image.png'],text: doc);
-   //Share.shareFilesWithResult(['$path/image.png'],text: widget.title,subject: widget.desc);
+   Share.shareFiles(['$path/image.png'],text: doc,);
 
-   //Share.share(widget.desc);
   }
 
 

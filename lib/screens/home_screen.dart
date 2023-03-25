@@ -3,6 +3,7 @@ import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/signIn.dart';
 import 'package:blog_app/screens/view_posts.dart';
+import 'package:blog_app/widgets/change_theme_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -38,13 +39,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          iconTheme: Theme.of(context).iconTheme,
           title: Text('Welcome back ${widget.name}',style: TextStyle(fontSize: 18),),
           centerTitle: true,
 
           actions: [
+            //dark theme
+            ChangeThemeButtonWidget(),
 
             //logout button
-            IconButton(icon: Icon(Icons.logout),onPressed: () async {
+            IconButton(icon: Icon(Icons.logout,color: Theme.of(context).iconTheme.color,),onPressed: () async {
 
               final googleSignIn=GoogleSignIn();
               final user= await googleSignIn.signOut();
@@ -76,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Search a blog title',
-                    prefixIcon: Icon(Icons.search)
+                    prefixIcon: Icon(Icons.search),
                 ),
                 onChanged: (String value){
          setState(() {
@@ -114,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
-                              color: Colors.grey.shade200,
+                              color: Theme.of(context).primaryColor,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               elevation: 2.5,
                               borderOnForeground: true,
@@ -183,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
-                              color: Colors.grey.shade200,
+                              color: Theme.of(context).primaryColor,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               elevation: 2.5,
                               borderOnForeground: true,
@@ -251,10 +255,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: (){
             Navigator.push(context,MaterialPageRoute(builder: (context)=>AddPostScreen()));
           },
-          child: Icon(Icons.add),
+          child: Icon(Icons.add,color: Colors.white,),
         ),
 
       ),

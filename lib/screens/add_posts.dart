@@ -46,6 +46,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
        height: 120,
        child: Column(
          children: [
+
            //For Camera
            InkWell(
              onTap: (){
@@ -57,6 +58,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
                title: Text('Camera'),
              ),
            ),
+
            //For Gallery
            InkWell(
              onTap: (){
@@ -83,7 +85,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
      if(pickedFile!=null){
        _image=File(pickedFile.path);
      }else{
-       print('No image selected');
+    toastMessages('No image selected',false);
      }
    });
  }
@@ -95,7 +97,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
      if(pickedFile!=null){
        _image=File(pickedFile.path);
      }else{
-       print('No image selected');
+       toastMessages('No image selected',false);
      }
    });
  }
@@ -149,7 +151,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
                              size: 34,
                            ),
 SizedBox(height: 12,),
-                           Text("Pick an image")
+                           Text("Pick an image",style: TextStyle(color: Colors.black),)
                          ],
                        ),
                      )
@@ -204,7 +206,8 @@ SizedBox(height: 12,),
 
                SizedBox(height: 30,),
 
-               RoundButton(title: 'Upload', onPress:()async{
+               RoundButton(
+                   title: 'Upload', onPress:()async{
                  setState(() {
                    showSpinner=true;
                  });

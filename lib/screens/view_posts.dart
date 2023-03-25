@@ -59,7 +59,7 @@ class _ViewPostsState extends State<ViewPosts> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                      Text(widget.title,style: TextStyle(fontSize: 30,color: Colors.black,fontWeight: FontWeight.bold),),
+                      Text(widget.title,style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
 
                     IconButton(
                       icon: Icon(Icons.delete,color: Colors.red,),
@@ -96,7 +96,7 @@ SizedBox(height: 8,),
                             Text(widget.date,style: TextStyle(fontWeight: FontWeight.bold),),
                             Text(widget.time,style: TextStyle(fontWeight: FontWeight.bold),),
                             SizedBox(height: MediaQuery.of(context).size.height*.01,),
-                            Text(widget.desc,style: TextStyle(fontSize: 18,color: Colors.black87),),
+                            Text(widget.desc,style: TextStyle(fontSize: 18),),
                           ],
                         )),
                   ],

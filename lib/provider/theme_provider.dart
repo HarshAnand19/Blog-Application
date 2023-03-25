@@ -4,7 +4,7 @@ class MyThemes {
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
     colorScheme: ColorScheme.dark(),
-    primaryColor: Colors.grey.shade700,
+    primaryColor: Colors.grey.shade800,
    iconTheme: IconThemeData(color: Colors.amber),
       appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
       floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.amber)

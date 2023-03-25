@@ -170,13 +170,17 @@ SizedBox(height: 12,),
                       controller: titleController,
                       keyboardType:TextInputType.text,
                       decoration: InputDecoration(
+                        focusedBorder:OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                            borderSide: BorderSide(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!)
+                        ),
                         labelText: 'Title',
                         hintText:'Enter Post Title',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                         hintStyle: TextStyle(color: Colors.grey,fontWeight: FontWeight.normal),
-                        labelStyle: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.normal),
+                        labelStyle: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!,fontWeight: FontWeight.normal),
                       ),
                     ),
 
@@ -189,13 +193,17 @@ SizedBox(height: 12,),
                       minLines: 2,
                       maxLines: 5,
                       decoration: InputDecoration(
+                        focusedBorder:OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                            borderSide: BorderSide(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!)
+                        ),
                         labelText: 'Description',
                         hintText:'Enter  your Blog Description',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                         hintStyle: TextStyle(color: Colors.grey,fontWeight: FontWeight.normal),
-                        labelStyle: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.normal),
+                        labelStyle: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!,fontWeight: FontWeight.normal),
                       ),
                     ),
 
@@ -206,68 +214,77 @@ SizedBox(height: 12,),
 
                SizedBox(height: 30,),
 
-               RoundButton(
-                   title: 'Upload', onPress:()async{
-                 setState(() {
-                   showSpinner=true;
-                 });
+               ElevatedButton(
 
-                 try{
+                 style: ElevatedButton.styleFrom(
+                   shape: StadiumBorder(),
+                     minimumSize: Size.fromHeight(40),
+                   backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor
+                 ),
+                   child: Text('Upload',style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),),
+                        onPressed: ()async{
+                          setState(() {
+                            showSpinner=true;
+                          });
 
-                   final User? user=_auth.currentUser;
-                   //uploading post to firebase storage
-                   int date = DateTime.now().millisecondsSinceEpoch;
+                          try{
 
-                   //uploading image to firebase storage
-                   final ref =storage.ref().child('PostImages/$date');
-                   UploadTask uploadTask=ref.putFile(_image!.absolute);
-                   await Future.value(uploadTask);
+                            final User? user=_auth.currentUser;
+                            //uploading post to firebase storage
+                            int date = DateTime.now().millisecondsSinceEpoch;
 
-                   // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
-                   // UploadTask uploadTask =ref.putFile(_image!.absolute);
-                   // await Future.value(uploadTask);
-                    var newUrl =await ref.getDownloadURL();
+                            //uploading image to firebase storage
+                            final ref =storage.ref().child('PostImages/$date');
+                            UploadTask uploadTask=ref.putFile(_image!.absolute);
+                            await Future.value(uploadTask);
 
-                    var date1=DateTime.now();
-                    var postDateKey =DateFormat('MMM d,yyyy');
-                    var postTimeKey =DateFormat('EEEE,hh:mm aaa');
-                    String formatDate=postDateKey.format(date1);
-                    String formatTime=postTimeKey.format(date1);
-                   //uploading post to firebase database
+                            // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
+                            // UploadTask uploadTask =ref.putFile(_image!.absolute);
+                            // await Future.value(uploadTask);
+                            var newUrl =await ref.getDownloadURL();
 
-                   postRef.child('Post List').child(date.toString()).set({
+                            var date1=DateTime.now();
+                            var postDateKey =DateFormat('MMM d,yyyy');
+                            var postTimeKey =DateFormat('EEEE,hh:mm aaa');
+                            String formatDate=postDateKey.format(date1);
+                            String formatTime=postTimeKey.format(date1);
+                            //uploading post to firebase database
 
-                       'pId':date.toString(),
-                       'pImage':newUrl.toString(),
-                       'pTime':date.toString(),
-                       'pTitle':titleController.text.toString(),
-                       'pDesc':descController.text.toString(),
-                       'uEmail':user?.email.toString(),
-                       'uid':user?.uid.toString(),
-                        'uploadDate':formatDate.toString(),
-                        'uploadTime':formatTime.toString()
+                            postRef.child('Post List').child(date.toString()).set({
 
-                   }).then((value) {
-                     toastMessages('Post  Uploaded Successfully!',true);
-                     Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user!.displayName.toString())));
-                     setState(() {
-                       showSpinner=false;
-                     });
-                   }).onError((error, stackTrace){
-                    toastMessages(error.toString(), false);
-                     setState(() {
-                       showSpinner=false;
-                     });
-                   });
+                              'pId':date.toString(),
+                              'pImage':newUrl.toString(),
+                              'pTime':date.toString(),
+                              'pTitle':titleController.text.toString(),
+                              'pDesc':descController.text.toString(),
+                              'uEmail':user?.email.toString(),
+                              'uid':user?.uid.toString(),
+                              'uploadDate':formatDate.toString(),
+                              'uploadTime':formatTime.toString()
 
-                 }catch(e){
-                   setState(() {
-                     showSpinner=false;
-                   });
-                   toastMessages(e.toString(),false);
-                 }
+                            }).then((value) {
+                              toastMessages('Post  Uploaded Successfully!',true);
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user!.displayName.toString())));
+                              setState(() {
+                                showSpinner=false;
+                              });
+                            }).onError((error, stackTrace){
+                              toastMessages(error.toString(), false);
+                              setState(() {
+                                showSpinner=false;
+                              });
+                            });
 
-               })
+                          }catch(e){
+                            setState(() {
+                              showSpinner=false;
+                            });
+                            toastMessages(e.toString(),false);
+                          }
+
+                        },
+
+               )
 
              ],
             ),

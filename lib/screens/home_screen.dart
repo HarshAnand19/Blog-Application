@@ -78,9 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
               TextFormField(
                 controller:searchController,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                  focusedBorder:OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35.0),
+                     borderSide: BorderSide(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!)
+                  ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35.0)
+                    ),
                     hintText: 'Search a blog title',
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: Icon(Icons.search,color:Theme.of(context).floatingActionButtonTheme.backgroundColor! ,),
                 ),
                 onChanged: (String value){
          setState(() {

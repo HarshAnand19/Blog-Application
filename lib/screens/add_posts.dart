@@ -221,7 +221,8 @@ SizedBox(height: 12,),
                      minimumSize: Size.fromHeight(40),
                    backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor
                  ),
-                   child: Text('Upload',style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),),
+                   child: Text('Upload',
+                     style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),),
                         onPressed: ()async{
                           setState(() {
                             showSpinner=true;

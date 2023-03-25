@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:awesome_dialog/awesome_dialog.dart';
-
+import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 class ViewPosts extends StatefulWidget {
   final String title;
   final String desc;
@@ -61,28 +65,20 @@ class _ViewPostsState extends State<ViewPosts> {
                       children: [
                       Text(widget.title,style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
 
-                    IconButton(
-                      icon: Icon(Icons.delete,color: Colors.red,),
+                    Row(
+                      children: [
+                  IconButton(
                       onPressed: (){
-                        // showDialog(context: context,builder: (context){
-                        //   return Container(
-                        //     child: AlertDialog(
-                        //       title: Text('Do you want to delete this post?'),
-                        //       actions: [
-                        //         TextButton(onPressed: (){
-                        //            Navigator.pop(context);
-                        //            postRef.child('Post List').child(widget.id).remove();
-                        //            Navigator.pop(context);
-                        //         }, child:Text('YES')),
-                        //         TextButton(onPressed: (){
-                        //           Navigator.pop(context);
-                        //         }, child:Text('CANCEL')),
-                        //       ],
-                        //     ),
-                        //   );
-                        // });
-                        _showDialog(context);
-                      },
+                        _sharefiles();
+                    }, icon:Icon(Icons.share,color: Colors.blue,)),
+
+                        IconButton(
+                          icon: Icon(Icons.delete,color: Colors.red,),
+                          onPressed: (){
+                            _showDialog(context);
+                          },
+                        ),
+                      ],
                     )
                     ],
                     ),
@@ -111,6 +107,20 @@ SizedBox(height: 8,),
 
 
   }
+
+ void _sharefiles() async{
+    String doc ="Title - ${widget.title}\n Description - ${widget.desc} ";
+   http.Response response = await http.get(Uri.parse(widget.photo));
+   final directory = await getTemporaryDirectory();
+   final path = directory.path;
+   final file = File('$path/image.png');
+   file.writeAsBytes(response.bodyBytes);
+   Share.shareFiles(['$path/image.png'],text: doc);
+   //Share.shareFilesWithResult(['$path/image.png'],text: widget.title,subject: widget.desc);
+
+   //Share.share(widget.desc);
+  }
+
 
   _showDialog(context){
     AwesomeDialog(

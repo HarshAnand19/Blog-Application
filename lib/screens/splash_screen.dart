@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
         (context, MaterialPageRoute(builder: (context)=>HomeScreen(name:user.displayName.toString()))));
     }else{
       Timer(Duration(seconds: 3),() => Navigator.pushReplacement
-        (context, MaterialPageRoute(builder: (context)=>OptionScreen())));
+        (context, MaterialPageRoute(builder: (context)=>LoginScreen())));
     }
   }
 

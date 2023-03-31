@@ -3,7 +3,7 @@ import 'package:blog_app/components/round_button.dart';
 import 'package:blog_app/screens/home_screen.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/options_login.dart';
-import 'package:blog_app/screens/signIn.dart';
+import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,7 @@ class _OptionScreenState extends State<OptionScreen> {
 
              Center(
                child: ElevButton(text: 'Sign up with Email',icon: 'assets/images/mail.png', onPress:(){
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
                }),
              ),
 

@@ -1,6 +1,7 @@
 import 'package:blog_app/components/round_button.dart';
 import 'package:blog_app/screens/forgot_password.dart';
 import 'package:blog_app/screens/home_screen.dart';
+import 'package:blog_app/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -149,7 +150,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don't have an Account?"),
+                        TextButton(
+                            onPressed: (){
+                              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>RegisterScreen()));
+                            }, child: Text("Sign Up"))
+                      ],
+                    )
                       ],
                     )
                 ),

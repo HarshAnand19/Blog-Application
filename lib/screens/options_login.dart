@@ -4,7 +4,7 @@ import 'package:blog_app/screens/forgot_password.dart';
 import 'package:blog_app/screens/home_screen.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
-import 'package:blog_app/screens/signIn.dart';
+import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

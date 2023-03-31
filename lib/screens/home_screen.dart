@@ -1,7 +1,7 @@
 import 'package:blog_app/screens/add_posts.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
-import 'package:blog_app/screens/signIn.dart';
+import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
 import 'package:blog_app/widgets/change_theme_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,10 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
               final user= await googleSignIn.signOut();
 
               auth.signOut().then((value){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>OptionScreen()));
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
               });
          if(user == null){
-           Navigator.push(context,MaterialPageRoute(builder: (context)=>OptionScreen()));
+           Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
 
          }
 

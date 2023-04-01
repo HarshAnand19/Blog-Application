@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:blog_app/screens/add_posts.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
@@ -30,18 +31,21 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController=TextEditingController();
   String search="";
   String username="";
+  String photoUrl="";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  getUsername();
+  getUserDetail();
   }
 
-  void getUsername() async{
+  void getUserDetail() async{
    DocumentSnapshot snap = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
   setState(() {
     username=(snap.data() as Map<String,dynamic>)['username'];
+    photoUrl=(snap.data() as Map<String,dynamic>)['photoUrl'];
+
   });
   }
 
@@ -54,30 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
      },
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           iconTheme: Theme.of(context).iconTheme,
-          title: Text('Welcome back ${username}',style: TextStyle(fontSize: 18),),
-          centerTitle: true,
-
+          title: Text('Welcome back ${username}',style: TextStyle(fontSize: 16),),
           actions: [
             //dark theme
             ChangeThemeButtonWidget(),
 
-            //logout button
-            IconButton(icon: Icon(Icons.logout,color: Theme.of(context).iconTheme.color,),onPressed: () async {
-
-              final googleSignIn=GoogleSignIn();
-              final user= await googleSignIn.signOut();
-
-              auth.signOut().then((value){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
-              });
-         if(user == null){
-           Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
-
-         }
-
-            }),
           ],
         ),
 
@@ -276,6 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
+
+
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: (){
@@ -284,7 +272,69 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(Icons.add,color: Colors.white,),
         ),
 
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.height*.35,
+                child: UserAccountsDrawerHeader(
+                  currentAccountPictureSize: Size.fromRadius(56.0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                  ),
+                  accountName: Center(child: Text(username,style: TextStyle(fontSize: 20,color:Theme.of(context).scaffoldBackgroundColor ),)),
+                  accountEmail: null,
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: NetworkImage(photoUrl),
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.home),
+                      title: Text('Home'),
+                      onTap: () {
+                        // Handle drawer item tap
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.logout),
+                      title: Text('Logout'),
+                      onTap: () {
+                        _showDialog(context);
+                       // await  auth.signOut().then((value){
+                       //    Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
+                       //  });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
       ),
     );
+  }
+
+  _showDialog(context){
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.info,
+        animType: AnimType.rightSlide,
+        title: 'Logout',
+        desc: 'Do you want to logout?',
+        btnCancelOnPress: () {
+        },
+        btnOkOnPress: () async{
+          await  auth.signOut().then((value){
+             Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
+           });
+        }
+    ).show();
   }
 }

@@ -4,6 +4,7 @@ import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
 import 'package:blog_app/widgets/change_theme_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -28,6 +29,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   TextEditingController searchController=TextEditingController();
   String search="";
+  String username="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  getUsername();
+  }
+
+  void getUsername() async{
+   DocumentSnapshot snap = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+  setState(() {
+    username=(snap.data() as Map<String,dynamic>)['username'];
+  });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           iconTheme: Theme.of(context).iconTheme,
-          title: Text('Welcome back ${widget.name}',style: TextStyle(fontSize: 18),),
+          title: Text('Welcome back ${username}',style: TextStyle(fontSize: 18),),
           centerTitle: true,
 
           actions: [

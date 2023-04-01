@@ -25,8 +25,6 @@ class MyApp extends StatelessWidget {
        create: (context)=> ThemeProvider(),
        builder: (context,_) {
          final themeProvider = Provider.of<ThemeProvider>(context);
-
-
          return MaterialApp(
            debugShowCheckedModeBanner: false,
            title: 'Blog Demo',

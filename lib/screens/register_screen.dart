@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:blog_app/components/round_button.dart';
+import 'package:blog_app/models/user.dart';
 import 'package:blog_app/resources/storage_methods.dart';
 import 'package:blog_app/screens/home_screen.dart';
 import 'package:blog_app/screens/login_screen.dart';
@@ -37,6 +38,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool showPassword=false;
 
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    bioController.dispose();
+    usernameController.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -44,6 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text('Create a new Account'),
           centerTitle: true,
         ),
@@ -54,9 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
 
-//email field
        Padding(
              padding: const EdgeInsets.symmetric(vertical: 30),
              child: Form(
@@ -83,12 +92,13 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
                          left: 80,
                          child: IconButton(
                            onPressed:selectImage
-                           ,icon: Icon(Icons.add_a_photo,color: Colors.blueAccent.shade100,),)
+                           ,icon: Icon(Icons.add_a_photo,color: Colors.blueAccent.shade200,),)
                      )
                    ],
                  ),
 
-                 //email field
+                 SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                 //username field
                  TextFormField(
                    controller:usernameController,
                    keyboardType: TextInputType.text,
@@ -106,8 +116,8 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
                      return value!.isEmpty?'enter username':null;
                    },
                  ),
+                 SizedBox(height: MediaQuery.of(context).size.height*.03,),
 
-                 SizedBox(height: 18,),
                  //email field
                  TextFormField(
                    controller:emailController,
@@ -126,11 +136,12 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
                      return value!.isEmpty?'enter email':null;
                  },
                  ),
+                 SizedBox(height: MediaQuery.of(context).size.height*.03,),
 
 
                  //password field
                  Padding(
-                   padding: const EdgeInsets.symmetric(vertical: 25),
+                   padding: const EdgeInsets.symmetric(vertical: 5),
                    child: TextFormField(
                      controller:passwordController,
                      obscureText: showPassword?false:true,
@@ -159,6 +170,8 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
                      },
                    ),
                  ),
+                 SizedBox(height: MediaQuery.of(context).size.height*.03,),
+
 
                  //bio field
                  TextFormField(
@@ -172,7 +185,6 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
                    ),
                    onChanged: (String value){
                      bio=value;
-
                    },
                    validator: (value){
                      return value!.isEmpty?'enter bio':null;
@@ -195,19 +207,30 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
                      //for storing profile pic in firebase storage
                      String photoUrl=await StorageMethods().uploadImage('profilePic', _image!,false);
 
+
                      //for registering users
-                     await _firestore.collection('users').doc(userCred.user!.uid).set({
-                       'username':usernameController.text,
-                       'uid':userCred.user!.uid,
-                       'email':emailController.text,
-                       'bio':bioController.text,
-                       'photoUrl':photoUrl,
-                     });
+                     // await _firestore.collection('users').doc(userCred.user!.uid).set({
+                     //   'username':usernameController.text,
+                     //   'uid':userCred.user!.uid,
+                     //   'email':emailController.text,
+                     //   'bio':bioController.text,
+                     //   'photoUrl':photoUrl,
+                     // });
+
+                     UserModel user=UserModel(
+                       username:usernameController.text,
+                         uid:userCred.user!.uid,
+                         email:emailController.text,
+                         bio:bioController.text,
+                         photoUrl:photoUrl,
+                     );
+
+                      await _firestore.collection('users').doc(userCred.user!.uid).set(user.toJson());
 
                      if(userCred!=null){
                        print('Success');
                        toastMessages('User registered Successfully!', true);
-                       Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: userCred.user!.displayName.toString(),)));
+                       Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: userCred.user!.displayName.toString(),)));
 
                        setState(() {
                          showSpinner=false;
@@ -253,6 +276,8 @@ Text("REGISTER",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 35),),
       _image=im;
     });
   }
+
+
 
   void toastMessages(String message,bool isPositive){
     Fluttertoast.showToast(

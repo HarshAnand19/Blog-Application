@@ -18,14 +18,21 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
   bool showSpinner = false;
-  TextEditingController emailController=TextEditingController();
-  TextEditingController passwordController=TextEditingController();
-  String email="",password="";
+  TextEditingController _emailController=TextEditingController();
+  TextEditingController _passwordController=TextEditingController();
+  String _email="",_password="";
 
   FirebaseAuth _auth=FirebaseAuth.instance;
   final _formkey=GlobalKey<FormState>();
 
   bool showPassword=false;
+
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+
+  }
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -33,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Login in your Existing Account'),
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: false,
           centerTitle: true,
         ),
         body: Padding(
@@ -54,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         //email field
                         TextFormField(
-                          controller:emailController,
+                          controller:_emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -63,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               prefixIcon: Icon(Icons.email)
                           ),
                           onChanged: (String value){
-                            email=value;
+                            _email=value;
 
                           },
                           validator: (value){
@@ -76,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 25),
                           child: TextFormField(
-                            controller:passwordController,
+                            controller:_passwordController,
                             obscureText: showPassword?false:true,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
@@ -97,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             ),
                             onChanged: (String value){
-                              password=value;
+                              _password=value;
                             },
                             validator: (value){
                               return value!.isEmpty?'enter password':null;
@@ -114,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                             try{
                               final user=await _auth.signInWithEmailAndPassword
-                                (email: email.toString().trim(), password: password.toString().trim());
+                                (email: _email.toString().trim(), password: _password.toString().trim());
 
                               if(user!=null){
                                 print('Success');
@@ -122,14 +129,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(() {
                                   showSpinner=false;
                                 });
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user.user!.displayName.toString(),)));
+                                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user.user!.displayName.toString(),)));
                               }
 
                             }catch(e){
                               print(e.toString());
                               toastMessages(e.toString(),false);
                               setState(() {
-                                passwordController.text="";
+                                _passwordController.text="";
                                 showSpinner=false;
                               });
                             }

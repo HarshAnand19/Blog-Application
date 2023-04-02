@@ -4,6 +4,7 @@ import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
+import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/widgets/change_theme_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -300,14 +301,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Handle drawer item tap
                       },
                     ),
+
+                    ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text('Profile'),
+                      onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context)=>ViewProfile(uid:FirebaseAuth.instance.currentUser!.uid,)));
+                      },
+                    ),
+
                     ListTile(
                       leading: Icon(Icons.logout),
                       title: Text('Logout'),
                       onTap: () {
                         _showDialog(context);
-                       // await  auth.signOut().then((value){
-                       //    Navigator.push(context,MaterialPageRoute(builder: (context)=>LoginScreen()));
-                       //  });
                       },
                     ),
                   ],

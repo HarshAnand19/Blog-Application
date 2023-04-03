@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blog_app/provider/user_provider.dart';
 import 'package:blog_app/screens/add_posts.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/option_screen.dart';
@@ -13,6 +14,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   final String name;
@@ -34,11 +36,21 @@ class _HomeScreenState extends State<HomeScreen> {
   String username="";
   String photoUrl="";
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    refreshUserData();
   getUserDetail();
+  }
+  refreshUserData() async {
+    UserProvider _userProvider = Provider.of<UserProvider>(context, listen: false);
+    await _userProvider.refreshUser();
+    setState(() {
+      username = _userProvider.getUser.username;
+      photoUrl = _userProvider.getUser.photoUrl;
+    });
   }
 
   void getUserDetail() async{
@@ -60,7 +72,19 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           iconTheme: Theme.of(context).iconTheme,
-          title: Text('Welcome back ${username}',style: TextStyle(fontSize: 16),),
+          title: StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                username = data['username'];
+                return Text('Welcome back $username', style: TextStyle(fontSize: 16));
+              } else {
+                return Text('Welcome back $username', style: TextStyle(fontSize: 16));
+              }
+            },
+          ),
+
           actions: [
             //dark theme
             ChangeThemeButtonWidget(),
@@ -283,7 +307,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
                   ),
-                  accountName: Center(child: Text(username,style: TextStyle(fontSize: 20,color:Theme.of(context).scaffoldBackgroundColor ),)),
+                  accountName: StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                        username = data['username'];
+                        return Text(' ${username}', style: TextStyle(fontSize: 20,color:Theme.of(context).scaffoldBackgroundColor));
+                      } else {
+                        return Text('${username}', style: TextStyle(fontSize: 20,color:Theme.of(context).scaffoldBackgroundColor));
+                      }
+                    },
+                  ),
                   accountEmail: null,
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: NetworkImage(photoUrl),

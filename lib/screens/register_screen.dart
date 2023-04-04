@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:blog_app/components/round_button.dart';
+import 'package:blog_app/main.dart';
 import 'package:blog_app/models/user.dart';
 import 'package:blog_app/resources/storage_methods.dart';
 import 'package:blog_app/screens/home_screen.dart';
@@ -91,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                          bottom: -10,
                          left: 80,
                          child: IconButton(
-                           onPressed:selectImage
+                           onPressed:_showBottomSheet
                            ,icon: Icon(Icons.add_a_photo,color: Colors.blueAccent.shade200,),)
                      )
                    ],
@@ -207,7 +208,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                      //for storing profile pic in firebase storage
                      String photoUrl=await StorageMethods().uploadImage('profilePic', _image!,false);
 
-
                      UserModel user=UserModel(
                        username:usernameController.text,
                          uid:userCred.user!.uid,
@@ -261,11 +261,72 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void selectImage() async{
-    Uint8List im =await pickImage(ImageSource.gallery);
+  void selectImage(ImageSource source) async{
+    Uint8List im =await pickImage(source);
     setState(() {
       _image=im;
     });
+
+  }
+
+  void _showBottomSheet(){
+    showModalBottomSheet(context: context,
+        shape:RoundedRectangleBorder(borderRadius: BorderRadius.only
+          (topLeft:Radius.circular(20),topRight: Radius.circular(20))
+        ), builder: (_){
+
+          return ListView(
+            padding: EdgeInsets.only(top:mq.height*.03,bottom: mq.height*.05),
+            shrinkWrap: true,
+            children: [
+              //pick profile picture label
+              Text("Pick a profile Picture",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+
+              SizedBox(height: mq.height*.02,),
+              //buttons for picking images
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+
+                  //pick images from gallery
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: CircleBorder(),
+                          fixedSize: Size(mq.width*.3,mq.height*.15)
+                      ),
+                      onPressed: (){
+                        selectImage(ImageSource.gallery);
+
+          },
+                      child:Image.asset('assets/images/add_image.png')
+                  ),
+
+                  //capture an image from camera
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: CircleBorder(),
+                          fixedSize: Size(mq.width*.3,mq.height*.15)
+                      ),
+                      onPressed:(){
+                        selectImage(ImageSource.camera);
+
+          },
+                      child:Image.asset('assets/images/camera.png')
+
+                  ),
+
+                ],
+              )
+            ],
+
+          );
+        }
+        );
+
   }
 
 

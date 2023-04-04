@@ -320,8 +320,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   accountEmail: null,
-                  currentAccountPicture: CircleAvatar(
-                    backgroundImage: NetworkImage(photoUrl),
+                  currentAccountPicture: StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                        photoUrl = data['photoUrl'];
+                        return  CircleAvatar(
+                          backgroundImage: NetworkImage(photoUrl),
+                        );
+                      } else {
+                        return  CircleAvatar(
+                          backgroundImage: NetworkImage(photoUrl),
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

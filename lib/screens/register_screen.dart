@@ -208,15 +208,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                      String photoUrl=await StorageMethods().uploadImage('profilePic', _image!,false);
 
 
-                     //for registering users
-                     // await _firestore.collection('users').doc(userCred.user!.uid).set({
-                     //   'username':usernameController.text,
-                     //   'uid':userCred.user!.uid,
-                     //   'email':emailController.text,
-                     //   'bio':bioController.text,
-                     //   'photoUrl':photoUrl,
-                     // });
-
                      UserModel user=UserModel(
                        username:usernameController.text,
                          uid:userCred.user!.uid,

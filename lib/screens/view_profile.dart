@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:blog_app/main.dart';
+import 'package:blog_app/resources/storage_methods.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/utils/Utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ViewProfile extends StatefulWidget {
   final String uid;
@@ -23,7 +28,7 @@ class _ViewProfileState extends State<ViewProfile> {
  late TextEditingController _usernameController;
  late TextEditingController _bioController;
  String username="";
-
+String? _image;
 
   @override
   void initState() {
@@ -97,7 +102,19 @@ class _ViewProfileState extends State<ViewProfile> {
 
                 Stack(
                   children: [
-                   ClipRRect(
+
+                     _image!=null?
+                ClipRRect(
+                borderRadius: BorderRadius.circular(mq.height*.1),
+                 child: Image.file(
+                   File(_image!),
+                    width: mq.height*.2,
+                   height: mq.height*.2,
+                      fit:BoxFit.cover,
+
+            ),
+          ):
+            ClipRRect(
                     borderRadius: BorderRadius.circular(mq.height*.1),
                     child: CachedNetworkImage(
                       width: mq.height *.2,
@@ -114,7 +131,7 @@ class _ViewProfileState extends State<ViewProfile> {
                       child: MaterialButton(
                         elevation: 1,
                         color: Colors.white,
-                        onPressed: (){},
+                        onPressed:_showBottomSheet,
                         shape: CircleBorder(),
                         child: Icon(Icons.edit,color: Colors.blue,),
                       ),
@@ -230,4 +247,87 @@ class _ViewProfileState extends State<ViewProfile> {
         }
     ).show();
   }
+
+ void _showBottomSheet(){
+   showModalBottomSheet(context: context,
+       shape:RoundedRectangleBorder(borderRadius: BorderRadius.only
+         (topLeft:Radius.circular(20),topRight: Radius.circular(20))
+       ), builder: (_){
+
+         return ListView(
+           padding: EdgeInsets.only(top:mq.height*.03,bottom: mq.height*.05),
+           shrinkWrap: true,
+           children: [
+             //pick profile picture label
+             Text("Pick a profile Picture",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),
+               textAlign: TextAlign.center,
+             ),
+
+             SizedBox(height: mq.height*.02,),
+             //buttons for picking images
+             Row(
+               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               children: [
+
+                 //pick images from gallery
+                 ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                         backgroundColor: Colors.white,
+                         shape: CircleBorder(),
+                         fixedSize: Size(mq.width*.3,mq.height*.15)
+                     ),
+                     onPressed: () async {
+                       // Pick an image
+                       final ImagePicker picker = ImagePicker();
+                       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                       if(image!=null){
+
+                         //setting image path
+                         setState(() {
+                           _image=image.path;
+                         });
+
+                         StorageMethods().updateProfilePicture(File(_image!),context);
+
+                         //for hiding bottom sheet
+                         Navigator.pop(context);
+                       }
+
+                     },
+                     child:Image.asset('assets/images/add_image.png')
+                 ),
+
+                 //capture an image from camera
+                 ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                         backgroundColor: Colors.white,
+                         shape: CircleBorder(),
+                         fixedSize: Size(mq.width*.3,mq.height*.15)
+                     ),
+                     onPressed: () async {
+                       // Pick an image
+                       final ImagePicker picker = ImagePicker();
+                       final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                       if(image!=null){
+                         //setting image path
+                         setState(() {
+                           _image=image.path;
+                         });
+                         StorageMethods().updateProfilePicture(File(_image!),context);
+
+                         //for hiding bottom sheet
+                         Navigator.pop(context);
+                       }
+                     },
+                     child:Image.asset('assets/images/camera.png')
+                 ),
+
+
+               ],
+             )
+           ],
+
+         );
+       });
+ }
 }

@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:blog_app/components/round_button.dart';
+import 'package:blog_app/models/user.dart';
+import 'package:blog_app/provider/user_provider.dart';
+import 'package:blog_app/resources/firestore_methods.dart';
 import 'package:blog_app/screens/home_screen.dart';
+import 'package:blog_app/utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +15,7 @@ import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -103,6 +108,9 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
  }
   @override
   Widget build(BuildContext context) {
+    final UserModel userDetail =Provider.of<UserProvider>(context).getUser;
+
+
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
       child: Scaffold(
@@ -223,69 +231,8 @@ SizedBox(height: 12,),
                  ),
                    child: Text('Upload',
                      style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),),
-                        onPressed: ()async{
-                          setState(() {
-                            showSpinner=true;
-                          });
-
-                          try{
-
-                            final User? user=_auth.currentUser;
-                            //uploading post to firebase storage
-                            int date = DateTime.now().millisecondsSinceEpoch;
-
-                            //uploading image to firebase storage
-                            final ref =storage.ref().child('PostImages/$date');
-                            UploadTask uploadTask=ref.putFile(_image!.absolute);
-                            await Future.value(uploadTask);
-
-                            // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
-                            // UploadTask uploadTask =ref.putFile(_image!.absolute);
-                            // await Future.value(uploadTask);
-                            var newUrl =await ref.getDownloadURL();
-
-                            var date1=DateTime.now();
-                            var postDateKey =DateFormat('MMM d,yyyy');
-                            var postTimeKey =DateFormat('EEEE,hh:mm aaa');
-                            String formatDate=postDateKey.format(date1);
-                            String formatTime=postTimeKey.format(date1);
-                            //uploading post to firebase database
-
-                            postRef.child('Post List').child(date.toString()).set({
-
-                              'pId':date.toString(),
-                              'pImage':newUrl.toString(),
-                              'pTime':date.toString(),
-                              'pTitle':titleController.text.toString(),
-                              'pDesc':descController.text.toString(),
-                              'uEmail':user?.email.toString(),
-                              'uid':user?.uid.toString(),
-                              'uploadDate':formatDate.toString(),
-                              'uploadTime':formatTime.toString()
-
-                            }).then((value) {
-                              toastMessages('Post  Uploaded Successfully!',true);
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user!.displayName.toString())));
-                              setState(() {
-                                showSpinner=false;
-                              });
-                            }).onError((error, stackTrace){
-                              toastMessages(error.toString(), false);
-                              setState(() {
-                                showSpinner=false;
-                              });
-                            });
-
-                          }catch(e){
-                            setState(() {
-                              showSpinner=false;
-                            });
-                            toastMessages(e.toString(),false);
-                          }
-
-                        },
-
-               )
+                        onPressed: ()=>createPosts(userDetail.uid, userDetail.username, userDetail.photoUrl)
+               ),
 
              ],
             ),
@@ -305,5 +252,112 @@ SizedBox(height: 12,),
         textColor: Colors.white,
         fontSize: 16.0
     );
+  }
+
+  // void createPost(
+  //     String uid,
+  //     String username,
+  //     String profImage,
+  //     )
+  // async{
+  //     setState(() {
+  //       showSpinner=true;
+  //     });
+  //
+  //     try{
+  //
+  //       final User? user=_auth.currentUser;
+  //       //uploading post to firebase storage
+  //       int date = DateTime.now().millisecondsSinceEpoch;
+  //
+  //       //uploading image to firebase storage
+  //       final ref =storage.ref().child('PostImages/$date');
+  //       UploadTask uploadTask=ref.putFile(_image!.absolute);
+  //       await Future.value(uploadTask);
+  //
+  //       // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
+  //       // UploadTask uploadTask =ref.putFile(_image!.absolute);
+  //       // await Future.value(uploadTask);
+  //       var newUrl =await ref.getDownloadURL();
+  //
+  //       var date1=DateTime.now();
+  //       var postDateKey =DateFormat('MMM d,yyyy');
+  //       var postTimeKey =DateFormat('EEEE,hh:mm aaa');
+  //       String formatDate=postDateKey.format(date1);
+  //       String formatTime=postTimeKey.format(date1);
+  //       //uploading post to firebase database
+  //
+  //       postRef.child('Post List').child(date.toString()).set({
+  //
+  //         'pId':date.toString(),
+  //         'pImage':newUrl.toString(),
+  //         'pTime':date.toString(),
+  //         'pTitle':titleController.text.toString(),
+  //         'pDesc':descController.text.toString(),
+  //         'uEmail':user?.email.toString(),
+  //         'uid':user?.uid.toString(),
+  //         'uploadDate':formatDate.toString(),
+  //         'uploadTime':formatTime.toString()
+  //
+  //       }).then((value) {
+  //         toastMessages('Post  Uploaded Successfully!',true);
+  //         Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user!.displayName.toString())));
+  //         setState(() {
+  //           showSpinner=false;
+  //         });
+  //       }).onError((error, stackTrace){
+  //         toastMessages(error.toString(), false);
+  //         setState(() {
+  //           showSpinner=false;
+  //         });
+  //       });
+  //
+  //     }catch(e){
+  //       setState(() {
+  //         showSpinner=false;
+  //       });
+  //       toastMessages(e.toString(),false);
+  //     }
+  //
+  // }
+
+void createPosts(
+    String uid,
+    String username,
+    String profImage,
+    )
+  async{
+   setState(() {
+     showSpinner=true;
+   });
+   try{
+     String res =await FireStoreMethods().uploadPost(
+         descController.text,
+         titleController.text,
+         _image!,
+         uid,
+         username,
+         profImage
+     );
+
+     if(res == "success"){
+       setState(() {
+         showSpinner=false;
+       });
+       toastMessages("Post Uploaded Successfully", true);
+       Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name:username)));
+     }else{
+       toastMessages(res, false);
+       setState(() {
+         showSpinner=false;
+       });
+       showSnackBar(res, context);
+     }
+   }catch(e){
+     setState(() {
+       showSpinner=false;
+     });
+showSnackBar(e.toString(), context);
+   }
   }
 }

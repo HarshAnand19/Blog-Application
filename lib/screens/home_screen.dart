@@ -121,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
          });
                 },
               ),
+
               Expanded(
 
                 //using FirebaseAnimatedList to show items in a list

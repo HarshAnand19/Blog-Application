@@ -9,13 +9,14 @@ import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 class ViewPosts extends StatefulWidget {
-  final String title;
-  final String desc;
- final String photo;
- final String id;
- final String date;
- final String time;
-   ViewPosts({Key? key,required this.title, required this.desc, required this.photo, required this.id, required this.date, required this.time}) : super(key: key);
+ //  final String title;
+ //  final String desc;
+ // final String photo;
+ // final String id;
+ // final String date;
+ // final String time;
+  final snap;
+   ViewPosts({Key? key, required this.snap,}) : super(key: key);
 
   @override
   State<ViewPosts> createState() => _ViewPostsState();
@@ -32,7 +33,7 @@ class _ViewPostsState extends State<ViewPosts> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(widget.snap['title']),
           centerTitle: true,
           automaticallyImplyLeading: true,
         ),
@@ -50,7 +51,7 @@ class _ViewPostsState extends State<ViewPosts> {
                       width: MediaQuery.of(context).size.width * 1 ,
                       height: MediaQuery.of(context).size.height * .4,
                       placeholder: 'assets/images/firebase.png',
-                      image:widget.photo
+                      image:widget.snap['photoUrl']
                 ),
                 ),
               ),
@@ -63,7 +64,7 @@ class _ViewPostsState extends State<ViewPosts> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                      Text(widget.title,style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                      Text(widget.snap['title'],style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
 
                     Row(
                       children: [
@@ -89,10 +90,10 @@ SizedBox(height: 8,),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(widget.date,style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(widget.time,style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(widget.snap['datePublished'],style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(widget.snap['timePublished'],style: TextStyle(fontWeight: FontWeight.bold),),
                             SizedBox(height: MediaQuery.of(context).size.height*.01,),
-                            Text(widget.desc,style: TextStyle(fontSize: 18),),
+                            Text(widget.snap['description'],style: TextStyle(fontSize: 18),),
                           ],
                         )),
                   ],
@@ -109,8 +110,8 @@ SizedBox(height: 8,),
   }
 
  void _sharefiles() async{
-    String doc ="Hey! Checkout this blog, \n Title - ${widget.title}\n Description - ${widget.desc} ";
-   http.Response response = await http.get(Uri.parse(widget.photo));
+    String doc ="Hey! Checkout this blog, \n Title - ${widget.snap['title']}\n Description - ${widget.snap['description']} ";
+   http.Response response = await http.get(Uri.parse(widget.snap['photoUrl']));
    final directory = await getTemporaryDirectory();
    final path = directory.path;
    final file = File('$path/image.png');
@@ -131,9 +132,9 @@ SizedBox(height: 8,),
         btnCancelOnPress: () {
         },
     btnOkOnPress: () {
-            postRef.child('Post List').child(widget.id).remove();
-            final ref =storage.ref().child('PostImages/').child(widget.id).delete();
-            Navigator.pop(context);
+            // postRef.child('Post List').child(widget.id).remove();
+            // final ref =storage.ref().child('PostImages/').child(widget.id).delete();
+            // Navigator.pop(context);
           }
     )..show();
   }

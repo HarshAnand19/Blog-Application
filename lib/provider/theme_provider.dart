@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class MyThemes {
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
+    textTheme: TextTheme(bodyText1: TextStyle(color: Colors.white)),
     colorScheme: ColorScheme.dark(),
     primaryColor: Colors.grey.shade800,
    iconTheme: IconThemeData(color: Colors.amber),
       appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.amber)
+      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.amber),
+
 
   );
 
@@ -15,6 +17,7 @@ class MyThemes {
 scaffoldBackgroundColor: Colors.white,
     primaryColor: Colors.white,
     colorScheme: ColorScheme.light(),
+      textTheme: TextTheme(bodyText1: TextStyle(color: Colors.black)),
       iconTheme: IconThemeData(color: Colors.white),
       appBarTheme: AppBarTheme(backgroundColor: Colors.deepOrange),
       floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.deepOrange)

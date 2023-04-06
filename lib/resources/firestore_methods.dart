@@ -46,12 +46,58 @@ class FireStoreMethods{
           likes: []
       );
 
-      _firestore.collection('posts').doc(uid).collection('posts').doc(postId).set(post.toJson());
+      _firestore.collection('posts').doc(postId).set(post.toJson());
 
       res="success";
     }catch(e){
       res=e.toString();
     }
     return res;
+  }
+
+  Future<void> likePost(String postId,String uid,List likes) async{
+
+    try {
+      //if likes contains my uid dislike it,otherwise like it
+      //if likes doesnt exists add our uid with all other uid
+
+      if (likes.contains(uid)) {
+        await  _firestore.collection('posts').doc(postId).update({
+          'likes': FieldValue.arrayRemove([uid]),
+        });
+      } else {
+        await  _firestore.collection('posts').doc(postId).update({
+          'likes':FieldValue.arrayUnion([uid])
+        });
+      }
+
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
+  //Comments
+  Future<void> postComments(String postId,String text,String uid,String name,String profilePic) async{
+
+    var date1=DateTime.now();
+    var postDateKey =DateFormat('MMM d,yyyy');
+    String formatDate=postDateKey.format(date1);
+    try{
+      if(text.isNotEmpty){
+        String commentId =Uuid().v1();
+        await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).set({
+          'profilePic':profilePic,
+          'name':name,
+          'uid':uid,
+          'text':text,
+          'commentId':commentId,
+          'datePublished':formatDate,
+        });
+      }else{
+        print('Text is empty');
+      }
+    }catch(e){
+      print(e.toString());
+    }
   }
 }

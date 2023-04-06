@@ -7,6 +7,7 @@ import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
 import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/widgets/change_theme_button.dart';
+import 'package:blog_app/widgets/post_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   //Get reference of firebase database
   final dbRef=FirebaseDatabase.instance.reference().child('Posts');
+  FirebaseFirestore _firestore= FirebaseFirestore.instance;
 
   FirebaseAuth auth=FirebaseAuth.instance;
 
@@ -124,165 +126,182 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Expanded(
 
-                //using FirebaseAnimatedList to show items in a list
-                  child:FirebaseAnimatedList(
-                    query: dbRef.child('Post List'),
-                    itemBuilder: (BuildContext context,
-                   DataSnapshot snapshot, Animation<double> animation, int index) {
-
-                      String tempTitle=snapshot.child('pTitle').value.toString();
-
-                      //passing data to viewposts screen
-                      String title1=snapshot.child('pTitle').value.toString();
-                      String desc1=snapshot.child('pDesc').value.toString();
-                      String pic=snapshot.child('pImage').value.toString();
-                        String id1 =snapshot.child('pId').value.toString();
-                        String date1=snapshot.child('uploadDate').value.toString();
-                          String time1=snapshot.child('uploadTime').value.toString();
-
-
-                      if(searchController.text.isEmpty){
-                        return InkWell(
-                          onTap: (){
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context)=>
-                         ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              color: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              elevation: 2.5,
-                              borderOnForeground: true,
-
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  
-                                  Padding(
-                                    padding: const EdgeInsets.all(7.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                            Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
-                                          ],
-                                        ),
-                                        Text(snapshot.child('uEmail').value.toString())
-                                      ],
-                                    ),
-                                  ),
-                                  //fetching the details from server(post image + post title + post desc)
-                                  ClipRRect(
-                                    borderRadius:BorderRadius.circular(10),
-                                    child: FadeInImage.assetNetwork(
-                                        fit: BoxFit.cover,
-                                        width: MediaQuery.of(context).size.width * 1,
-                                        height: MediaQuery.of(context).size.height * .25,
-                                        placeholder: 'assets/images/firebase.png',
-                                        image:snapshot.child('pImage').value.toString()),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(snapshot.child('pTitle').value.toString(),
-                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(snapshot.child('pDesc').value.toString(),
-                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-
-                      }else if(tempTitle.toLowerCase().contains(searchController.text.toLowerCase().toString())){
-
-                        return InkWell(
-                          onTap: (){
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context)=>
-                                    ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              color: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              elevation: 2.5,
-                              borderOnForeground: true,
-
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(7.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                            Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
-                                          ],
-                                        ),
-                                        Text(snapshot.child('uEmail').value.toString())
-                                      ],
-                                    ),
-                                  ),
-                                  //fetching the details from server(post image + post title + post desc)
-                                  ClipRRect(
-                                    borderRadius:BorderRadius.circular(10),
-                                    child: FadeInImage.assetNetwork(
-                                        fit: BoxFit.cover,
-                                        width: MediaQuery.of(context).size.width * 1,
-                                        height: MediaQuery.of(context).size.height * .25,
-                                        placeholder: 'assets/images/firebase.png',
-                                        image:snapshot.child('pImage').value.toString()),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(snapshot.child('pTitle').value.toString(),
-                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(snapshot.child('pDesc').value.toString(),
-                                      style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }else{
-                        return Container();
-                      }
-
+                  child:StreamBuilder(
+                    stream: _firestore.collection('posts').orderBy('datePublished',descending: true).snapshots(),
+                    builder: (context,AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot){
+                     if(snapshot.connectionState == ConnectionState.waiting){
+                       return Center(child: CircularProgressIndicator(),);
+                     }
+                     return ListView.builder(
+                         itemCount: snapshot.data!.docs.length,
+                         itemBuilder: (context,index) {
+                           return PostCard(
+                             snap: snapshot.data!.docs[index].data(),
+                           );
+                         }
+                     );
                     },
-                  ) ,
+                  )
+                  
+                  
+                  // FirebaseAnimatedList(
+                  //   query: dbRef.child('Post List'),
+                  //   itemBuilder: (BuildContext context,
+                  //  DataSnapshot snapshot, Animation<double> animation, int index) {
+                  //
+                  //     String tempTitle=snapshot.child('pTitle').value.toString();
+                  //
+                  //     //passing data to viewposts screen
+                  //     String title1=snapshot.child('pTitle').value.toString();
+                  //     String desc1=snapshot.child('pDesc').value.toString();
+                  //     String pic=snapshot.child('pImage').value.toString();
+                  //       String id1 =snapshot.child('pId').value.toString();
+                  //       String date1=snapshot.child('uploadDate').value.toString();
+                  //         String time1=snapshot.child('uploadTime').value.toString();
+                  //
+                  //
+                  //     if(searchController.text.isEmpty){
+                  //       return InkWell(
+                  //         onTap: (){
+                  //           FocusManager.instance.primaryFocus?.unfocus();
+                  //           Navigator.push(context,
+                  //               MaterialPageRoute(builder: (context)=>
+                  //        ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
+                  //         },
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Card(
+                  //             color: Theme.of(context).primaryColor,
+                  //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  //             elevation: 2.5,
+                  //             borderOnForeground: true,
+                  //
+                  //             child: Column(
+                  //               mainAxisAlignment: MainAxisAlignment.start,
+                  //               crossAxisAlignment: CrossAxisAlignment.start,
+                  //               children: [
+                  //                
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.all(7.0),
+                  //                   child: Column(
+                  //                     crossAxisAlignment: CrossAxisAlignment.start,
+                  //                     children: [
+                  //                       Row(
+                  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                       crossAxisAlignment: CrossAxisAlignment.start,
+                  //                         children: [
+                  //                           Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                  //                           Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
+                  //                         ],
+                  //                       ),
+                  //                       Text(snapshot.child('uEmail').value.toString())
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //                 //fetching the details from server(post image + post title + post desc)
+                  //                 ClipRRect(
+                  //                   borderRadius:BorderRadius.circular(10),
+                  //                   child: FadeInImage.assetNetwork(
+                  //                       fit: BoxFit.cover,
+                  //                       width: MediaQuery.of(context).size.width * 1,
+                  //                       height: MediaQuery.of(context).size.height * .25,
+                  //                       placeholder: 'assets/images/firebase.png',
+                  //                       image:snapshot.child('pImage').value.toString()),
+                  //                 ),
+                  //                 SizedBox(height: 10,),
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //                   child: Text(snapshot.child('pTitle').value.toString(),
+                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                  //                   ),
+                  //                 ),
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //                   child: Text(snapshot.child('pDesc').value.toString(),
+                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                  //                   ),
+                  //                 ),
+                  //
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //
+                  //     }else if(tempTitle.toLowerCase().contains(searchController.text.toLowerCase().toString())){
+                  //
+                  //       return InkWell(
+                  //         onTap: (){
+                  //           FocusManager.instance.primaryFocus?.unfocus();
+                  //           Navigator.push(context,
+                  //               MaterialPageRoute(builder: (context)=>
+                  //                   ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
+                  //         },
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Card(
+                  //             color: Theme.of(context).primaryColor,
+                  //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  //             elevation: 2.5,
+                  //             borderOnForeground: true,
+                  //
+                  //             child: Column(
+                  //               mainAxisAlignment: MainAxisAlignment.start,
+                  //               crossAxisAlignment: CrossAxisAlignment.start,
+                  //               children: [
+                  //
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.all(7.0),
+                  //                   child: Column(
+                  //                     crossAxisAlignment: CrossAxisAlignment.start,
+                  //                     children: [
+                  //                       Row(
+                  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                         crossAxisAlignment: CrossAxisAlignment.start,
+                  //                         children: [
+                  //                           Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                  //                           Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
+                  //                         ],
+                  //                       ),
+                  //                       Text(snapshot.child('uEmail').value.toString())
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //                 //fetching the details from server(post image + post title + post desc)
+                  //                 ClipRRect(
+                  //                   borderRadius:BorderRadius.circular(10),
+                  //                   child: FadeInImage.assetNetwork(
+                  //                       fit: BoxFit.cover,
+                  //                       width: MediaQuery.of(context).size.width * 1,
+                  //                       height: MediaQuery.of(context).size.height * .25,
+                  //                       placeholder: 'assets/images/firebase.png',
+                  //                       image:snapshot.child('pImage').value.toString()),
+                  //                 ),
+                  //                 SizedBox(height: 10,),
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //                   child: Text(snapshot.child('pTitle').value.toString(),
+                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                  //                   ),
+                  //                 ),
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //                   child: Text(snapshot.child('pDesc').value.toString(),
+                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                  //                   ),
+                  //                 ),
+                  //
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     }else{
+                  //       return Container();
+                  //     }
+                  //
+                  //   },
+                  // ) ,
               )
             ],
           ),

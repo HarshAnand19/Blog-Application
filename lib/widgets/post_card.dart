@@ -116,7 +116,7 @@ class _PostCardState extends State<PostCard> {
                   //Comment Button
                   IconButton(onPressed:() => Navigator.push(context,
                       MaterialPageRoute(builder: (context)=>CommentScreen(snap:  widget.snap))),
-                      icon:Icon(Icons.comment_outlined, color: Colors.amber,)
+                      icon:Icon(Icons.comment_outlined, color: Theme.of(context).textTheme.bodyText1!.color,)
                   ),
 
                   Expanded(

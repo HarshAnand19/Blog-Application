@@ -64,48 +64,52 @@ class _CommentScreenState extends State<CommentScreen> {
         child: Container(
           height: kToolbarHeight,
           margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          padding: EdgeInsets.only(left: 16,right: 8),
-          child: Row(
-            children: [
-
-              CircleAvatar(
-                backgroundImage: NetworkImage(user.photoUrl),
-                radius: 18,
-              ),
-
-              Expanded(
-                  child:Padding(
-                    padding: EdgeInsets.only(left: 16,right: 8),
-                    child: TextField(
-                      controller: _commentController,
-                      decoration: InputDecoration(
-                          hintText: 'Enter a Comment ${user.username}',
-                          border: InputBorder.none
-                      ),
-                    ),
-                  )
-              ),
-              InkWell(
-                onTap:() async{
-
-                  //Posting Comments
-                  await FireStoreMethods().postComments(
-                      widget.snap['postId'],
-                      _commentController.text,
-                      user.uid,
-                      user.username,
-                      user.photoUrl
-                  );
-                  setState(() {
-                    _commentController.text="";
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 9,horizontal: 9),
-                  child: Text('Post',style: TextStyle(color: Colors.blue),),
+          child: Container(
+            width: double.infinity ,
+            decoration: BoxDecoration(
+              border: Border.all()
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(user.photoUrl),
+                  radius: 18,
                 ),
-              )
-            ],
+
+                Expanded(
+                    child:Padding(
+                      padding: EdgeInsets.only(left: 16,right: 8),
+                      child: TextField(
+                        controller: _commentController,
+                        decoration: InputDecoration(
+                            hintText: 'Enter a Comment ${user.username}',
+                            border: InputBorder.none
+                        ),
+                      ),
+                    )
+                ),
+                InkWell(
+                  onTap:() async{
+
+                    //Posting Comments
+                    await FireStoreMethods().postComments(
+                        widget.snap['postId'],
+                        _commentController.text,
+                        user.uid,
+                        user.username,
+                        user.photoUrl
+                    );
+                    setState(() {
+                      _commentController.text="";
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 9,horizontal: 9),
+                    child: Text('Post',style: TextStyle(color: Colors.blue),),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

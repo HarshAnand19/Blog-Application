@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:blog_app/provider/user_provider.dart';
 import 'package:blog_app/screens/add_posts.dart';
 import 'package:blog_app/screens/login_screen.dart';
+import 'package:blog_app/screens/my_blogs.dart';
 import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
@@ -366,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       leading: Icon(Icons.home),
                       title: Text('Home'),
                       onTap: () {
-                        // Handle drawer item tap
+                        Navigator.pop(context);
                       },
                     ),
 
@@ -376,6 +377,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context)=>ViewProfile(uid:FirebaseAuth.instance.currentUser!.uid,)));
+                      },
+                    ),
+
+                    ListTile(
+                      leading: Icon(Icons.edit),
+                      title: Text('My Blogs'),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MyBlogs()));
                       },
                     ),
 

@@ -54,16 +54,16 @@ class _CommentCardState extends State<CommentCard> {
           ),
 
           //Like Button
-          Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8),
-                child: Icon(Icons.favorite_outline,size: 16,color: Colors.red,),
-              ),
-
-              Text("10")
-            ],
-          )
+          // Column(
+          //   children: [
+          //     Container(
+          //       padding: EdgeInsets.all(8),
+          //       child: Icon(Icons.favorite_outline,size: 16,color: Colors.red,),
+          //     ),
+          //
+          //     Text("10")
+          //   ],
+          // )
         ],
       ),
     );

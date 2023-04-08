@@ -122,8 +122,14 @@ class _PostCardState extends State<PostCard> {
                   Expanded(
                       child: Align(
                   alignment: Alignment.bottomRight,
-                  child: IconButton(onPressed: (){}, icon: Icon(Icons.bookmark_border,color: Colors.green,)),
-                  )
+                  child: IconButton(onPressed: () async{
+                    await FireStoreMethods().likebookmark(widget.snap['postId'], user.uid,widget.snap['bookmark']);
+                  },
+                    icon: widget.snap['bookmark'].contains(user.uid)
+                        ? Icon(Icons.bookmark, color: Colors.green)
+                        : Icon(Icons.bookmark_border, color: Colors.green),
+                      )
+                  ),
                   )
                 ],
               ),

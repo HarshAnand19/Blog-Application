@@ -43,7 +43,8 @@ class FireStoreMethods{
           timePublished: formatTime,
           postUrl: photoUrl,
           profImage: profImage,
-          likes: []
+          likes: [],
+          bookmark: []
       );
 
       _firestore.collection('posts').doc(postId).set(post.toJson());
@@ -55,6 +56,7 @@ class FireStoreMethods{
     return res;
   }
 
+  //like Post
   Future<void> likePost(String postId,String uid,List likes) async{
 
     try {
@@ -96,6 +98,24 @@ class FireStoreMethods{
       }else{
         print('Text is empty');
       }
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
+  Future<void> likebookmark(String postId,String uid,List bookmark) async{
+    try {
+
+      if (bookmark.contains(uid)) {
+        await  _firestore.collection('posts').doc(postId).update({
+          'bookmark': FieldValue.arrayRemove([uid]),
+        });
+      } else {
+        await  _firestore.collection('posts').doc(postId).update({
+          'bookmark':FieldValue.arrayUnion([uid])
+        });
+      }
+
     }catch(e){
       print(e.toString());
     }

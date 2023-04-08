@@ -11,6 +11,7 @@ class Post{
   final String postUrl;
   final String profImage;
   final likes;
+  final bookmark;
 
   const Post({
     required this.description,
@@ -22,7 +23,8 @@ class Post{
     required this.timePublished,
     required this.postUrl,
     required this.profImage,
-    required this.likes
+    required this.likes,
+    required this.bookmark
 
   });
 
@@ -37,6 +39,7 @@ class Post{
     'profImage':profImage,
     'likes':likes,
     'postUrl':postUrl,
+    'bookmark':bookmark
   };
 
   static Post fromSnap(DocumentSnapshot snap){
@@ -53,6 +56,7 @@ class Post{
       likes: snapshot['likes'],
       postUrl: snapshot['postUrl'],
       postId: snapshot['postId'],
+      bookmark: snapshot['bookmark']
     );
   }
 }

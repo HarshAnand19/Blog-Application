@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:blog_app/provider/user_provider.dart';
 import 'package:blog_app/screens/add_posts.dart';
+import 'package:blog_app/screens/bookmark_screen.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/my_blogs.dart';
 import 'package:blog_app/screens/option_screen.dart';
@@ -367,7 +368,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       leading: Icon(Icons.home),
                       title: Text('Home'),
                       onTap: () {
-                        Navigator.pop(context);
+                      Navigator.pop(context);
+
                       },
                     ),
 
@@ -377,6 +379,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context)=>ViewProfile(uid:FirebaseAuth.instance.currentUser!.uid,)));
+                      },
+                    ),
+
+                    ListTile(
+                      leading: Icon(Icons.bookmark),
+                      title: Text('Bookmarked Posts'),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>BookmarkScreen()));
                       },
                     ),
 

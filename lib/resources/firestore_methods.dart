@@ -3,7 +3,9 @@ import 'dart:typed_data';
 
 import 'package:blog_app/models/posts.dart';
 import 'package:blog_app/resources/storage_methods.dart';
+import 'package:blog_app/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -103,17 +105,17 @@ class FireStoreMethods{
     }
   }
 
-  Future<void> likebookmark(String postId,String uid,List bookmark) async{
+  Future<void> likebookmark(String postId,String uid,List bookmark,BuildContext context) async{
     try {
 
       if (bookmark.contains(uid)) {
         await  _firestore.collection('posts').doc(postId).update({
           'bookmark': FieldValue.arrayRemove([uid]),
-        });
+        }).then((value) => showSnackBar('Bookmark removed', context));
       } else {
         await  _firestore.collection('posts').doc(postId).update({
           'bookmark':FieldValue.arrayUnion([uid])
-        });
+        }).then((value) => showSnackBar('Bookmark added', context));
       }
 
     }catch(e){

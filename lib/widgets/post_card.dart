@@ -2,6 +2,7 @@ import 'package:blog_app/models/user.dart';
 import 'package:blog_app/provider/user_provider.dart';
 import 'package:blog_app/resources/firestore_methods.dart';
 import 'package:blog_app/screens/comment_screen.dart';
+import 'package:blog_app/screens/view_posts.dart';
 import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,7 +46,17 @@ class _PostCardState extends State<PostCard> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: (){
-
+      Navigator.push(context,MaterialPageRoute(builder: (context) =>
+          ViewPosts(
+              title: widget.snap['title'],
+               desc: widget.snap['description'],
+               photo: widget.snap['postUrl'],
+              id: widget.snap['uid'],
+              date: widget.snap['datePublished'],
+              time: widget.snap['timePublished'],
+            profImage: widget.snap['profImage'],
+          )
+      ));
         },
         child: Card(
           color: Theme.of(context).primaryColor,
@@ -123,7 +134,7 @@ class _PostCardState extends State<PostCard> {
                       child: Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(onPressed: () async{
-                    await FireStoreMethods().likebookmark(widget.snap['postId'], user.uid,widget.snap['bookmark']);
+                    await FireStoreMethods().likebookmark(widget.snap['postId'], user.uid,widget.snap['bookmark'],context);
                   },
                     icon: widget.snap['bookmark'].contains(user.uid)
                         ? Icon(Icons.bookmark, color: Colors.green)

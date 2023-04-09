@@ -37,10 +37,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 );
               }
               return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Total Posts: ${snapshot.data?.docs.length ?? 0}',
-                  style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                padding: const EdgeInsets.only(top: 38.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Total Posts: ${snapshot.data?.docs.length ?? 0}',
+                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                  ),
                 ),
               );
             },

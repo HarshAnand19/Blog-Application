@@ -6,6 +6,7 @@ import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/my_blogs.dart';
 import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/register_screen.dart';
+import 'package:blog_app/screens/search_blogs.dart';
 import 'package:blog_app/screens/view_posts.dart';
 import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/widgets/change_theme_button.dart';
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String search="";
   String username="";
   String photoUrl="";
-
+ String email="";
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       username = _userProvider.getUser.username;
       photoUrl = _userProvider.getUser.photoUrl;
+      email=_userProvider.getUser.email;
     });
   }
 
@@ -62,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   setState(() {
     username=(snap.data() as Map<String,dynamic>)['username'];
     photoUrl=(snap.data() as Map<String,dynamic>)['photoUrl'];
+    email=(snap.data() as Map<String,dynamic>)['email'];
 
   });
   }
@@ -106,25 +109,25 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
 
               //search field
-              TextFormField(
-                controller:searchController,
-                decoration: InputDecoration(
-                  focusedBorder:OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35.0),
-                     borderSide: BorderSide(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!)
-                  ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35.0)
-                    ),
-                    hintText: 'Search a blog title',
-                    prefixIcon: Icon(Icons.search,color:Theme.of(context).floatingActionButtonTheme.backgroundColor! ,),
-                ),
-                onChanged: (String value){
-         setState(() {
-           search=value;
-         });
-                },
-              ),
+         //      TextFormField(
+         //        controller:searchController,
+         //        decoration: InputDecoration(
+         //          focusedBorder:OutlineInputBorder(
+         //              borderRadius: BorderRadius.circular(35.0),
+         //             borderSide: BorderSide(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!)
+         //          ),
+         //            border: OutlineInputBorder(
+         //              borderRadius: BorderRadius.circular(35.0)
+         //            ),
+         //            hintText: 'Search a blog title',
+         //            prefixIcon: Icon(Icons.search,color:Theme.of(context).floatingActionButtonTheme.backgroundColor! ,),
+         //        ),
+         //        onChanged: (String value){
+         // setState(() {
+         //   search=value;
+         // });
+         //        },
+         //      ),
 
               Expanded(
 
@@ -144,166 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                      );
                     },
                   )
-                  
-                  
-                  // FirebaseAnimatedList(
-                  //   query: dbRef.child('Post List'),
-                  //   itemBuilder: (BuildContext context,
-                  //  DataSnapshot snapshot, Animation<double> animation, int index) {
-                  //
-                  //     String tempTitle=snapshot.child('pTitle').value.toString();
-                  //
-                  //     //passing data to viewposts screen
-                  //     String title1=snapshot.child('pTitle').value.toString();
-                  //     String desc1=snapshot.child('pDesc').value.toString();
-                  //     String pic=snapshot.child('pImage').value.toString();
-                  //       String id1 =snapshot.child('pId').value.toString();
-                  //       String date1=snapshot.child('uploadDate').value.toString();
-                  //         String time1=snapshot.child('uploadTime').value.toString();
-                  //
-                  //
-                  //     if(searchController.text.isEmpty){
-                  //       return InkWell(
-                  //         onTap: (){
-                  //           FocusManager.instance.primaryFocus?.unfocus();
-                  //           Navigator.push(context,
-                  //               MaterialPageRoute(builder: (context)=>
-                  //        ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
-                  //         },
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.all(8.0),
-                  //           child: Card(
-                  //             color: Theme.of(context).primaryColor,
-                  //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  //             elevation: 2.5,
-                  //             borderOnForeground: true,
-                  //
-                  //             child: Column(
-                  //               mainAxisAlignment: MainAxisAlignment.start,
-                  //               crossAxisAlignment: CrossAxisAlignment.start,
-                  //               children: [
-                  //                
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.all(7.0),
-                  //                   child: Column(
-                  //                     crossAxisAlignment: CrossAxisAlignment.start,
-                  //                     children: [
-                  //                       Row(
-                  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //                       crossAxisAlignment: CrossAxisAlignment.start,
-                  //                         children: [
-                  //                           Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                  //                           Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
-                  //                         ],
-                  //                       ),
-                  //                       Text(snapshot.child('uEmail').value.toString())
-                  //                     ],
-                  //                   ),
-                  //                 ),
-                  //                 //fetching the details from server(post image + post title + post desc)
-                  //                 ClipRRect(
-                  //                   borderRadius:BorderRadius.circular(10),
-                  //                   child: FadeInImage.assetNetwork(
-                  //                       fit: BoxFit.cover,
-                  //                       width: MediaQuery.of(context).size.width * 1,
-                  //                       height: MediaQuery.of(context).size.height * .25,
-                  //                       placeholder: 'assets/images/firebase.png',
-                  //                       image:snapshot.child('pImage').value.toString()),
-                  //                 ),
-                  //                 SizedBox(height: 10,),
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //                   child: Text(snapshot.child('pTitle').value.toString(),
-                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                  //                   ),
-                  //                 ),
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //                   child: Text(snapshot.child('pDesc').value.toString(),
-                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
-                  //                   ),
-                  //                 ),
-                  //
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       );
-                  //
-                  //     }else if(tempTitle.toLowerCase().contains(searchController.text.toLowerCase().toString())){
-                  //
-                  //       return InkWell(
-                  //         onTap: (){
-                  //           FocusManager.instance.primaryFocus?.unfocus();
-                  //           Navigator.push(context,
-                  //               MaterialPageRoute(builder: (context)=>
-                  //                   ViewPosts(title: title1,desc:desc1,photo: pic,id: id1,date: date1,time: time1,)));
-                  //         },
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.all(8.0),
-                  //           child: Card(
-                  //             color: Theme.of(context).primaryColor,
-                  //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  //             elevation: 2.5,
-                  //             borderOnForeground: true,
-                  //
-                  //             child: Column(
-                  //               mainAxisAlignment: MainAxisAlignment.start,
-                  //               crossAxisAlignment: CrossAxisAlignment.start,
-                  //               children: [
-                  //
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.all(7.0),
-                  //                   child: Column(
-                  //                     crossAxisAlignment: CrossAxisAlignment.start,
-                  //                     children: [
-                  //                       Row(
-                  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //                         crossAxisAlignment: CrossAxisAlignment.start,
-                  //                         children: [
-                  //                           Text(snapshot.child('uploadDate').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                  //                           Text(snapshot.child('uploadTime').value.toString(),style: TextStyle(fontWeight: FontWeight.bold),)
-                  //                         ],
-                  //                       ),
-                  //                       Text(snapshot.child('uEmail').value.toString())
-                  //                     ],
-                  //                   ),
-                  //                 ),
-                  //                 //fetching the details from server(post image + post title + post desc)
-                  //                 ClipRRect(
-                  //                   borderRadius:BorderRadius.circular(10),
-                  //                   child: FadeInImage.assetNetwork(
-                  //                       fit: BoxFit.cover,
-                  //                       width: MediaQuery.of(context).size.width * 1,
-                  //                       height: MediaQuery.of(context).size.height * .25,
-                  //                       placeholder: 'assets/images/firebase.png',
-                  //                       image:snapshot.child('pImage').value.toString()),
-                  //                 ),
-                  //                 SizedBox(height: 10,),
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //                   child: Text(snapshot.child('pTitle').value.toString(),
-                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                  //                   ),
-                  //                 ),
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //                   child: Text(snapshot.child('pDesc').value.toString(),
-                  //                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
-                  //                   ),
-                  //                 ),
-                  //
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       );
-                  //     }else{
-                  //       return Container();
-                  //     }
-                  //
-                  //   },
-                  // ) ,
+
               )
             ],
           ),
@@ -341,7 +185,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                   ),
-                  accountEmail: null,
+                  accountEmail: StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                        email = data['email'];
+                        return Text(' ${email}', style: TextStyle(fontSize: 14,color:Theme.of(context).scaffoldBackgroundColor));
+                      } else {
+                        return Text('${email}', style: TextStyle(fontSize: 14,color:Theme.of(context).scaffoldBackgroundColor));
+                      }
+                    },
+                  ),
                   currentAccountPicture: StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
                     builder: (context, snapshot) {
@@ -395,6 +250,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text('My Blogs'),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>MyBlogs()));
+                      },
+                    ),
+
+                    ListTile(
+                      leading: Icon(Icons.search),
+                      title: Text('Search'),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchBlogs()));
                       },
                     ),
 

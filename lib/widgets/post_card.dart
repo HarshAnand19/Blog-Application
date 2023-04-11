@@ -5,6 +5,7 @@ import 'package:blog_app/screens/comment_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
 import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/utils/Utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -97,18 +98,19 @@ class _PostCardState extends State<PostCard> {
 
 
               //fetching the details from server(post image + post title + post desc)
-          Container(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: FadeInImage.assetNetwork(
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width * 1,
-                height: MediaQuery.of(context).size.height * .25,
-                placeholder: 'assets/images/firebase.png',
-                image: widget.snap?['postUrl'] ?? 'assets/images/firebase.png',
+              Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.snap['postUrl'],
+                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    width: MediaQuery.of(context).size.width * 1,
+                    height: MediaQuery.of(context).size.height * .25,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-          ),
 
 
           Row(

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blog_app/models/comments.dart';
 import 'package:blog_app/models/posts.dart';
 import 'package:blog_app/resources/storage_methods.dart';
 import 'package:blog_app/utils/Utils.dart';
@@ -81,25 +82,32 @@ class FireStoreMethods{
   }
 
   //Comments
-  Future<void> postComments(String postId,String text,String uid,String name,String profilePic) async{
+  Future<void> postComments(String postId,String text,String uid,String name,String profilePic,Typeu type) async{
 
     var date1=DateTime.now();
     var postDateKey =DateFormat('MMM d,yyyy');
     String formatDate=postDateKey.format(date1);
     try{
-      if(text.isNotEmpty){
+
         String commentId =Uuid().v1();
-        await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).set({
-          'profilePic':profilePic,
-          'name':name,
-          'uid':uid,
-          'text':text,
-          'commentId':commentId,
-          'datePublished':formatDate,
-        });
-      }else{
-        print('Text is empty');
-      }
+        Comments comments =Comments(
+            profilePic: profilePic,
+            name: name,
+            uid: uid,
+            type: type,
+            text: text,
+            commentId: commentId,
+            datePublished: formatDate
+        );
+        await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).set(
+          // 'profilePic':profilePic,
+          // 'name':name,
+          // 'uid':uid,
+          // 'text':text,
+          // 'commentId':commentId,
+          // 'datePublished':formatDate,
+          comments.toJson());
+
     }catch(e){
       print(e.toString());
     }

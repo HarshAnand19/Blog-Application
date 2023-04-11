@@ -46,7 +46,7 @@ class _SearchBlogsState extends State<SearchBlogs> {
                   stream: _firestore
                       .collection('posts')
                       .orderBy('datePublished', descending: true)
-                      .where('title', isEqualTo: search)
+                      .where('title'.toLowerCase(), isEqualTo: search.toLowerCase())
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {

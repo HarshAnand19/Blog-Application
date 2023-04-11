@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:blog_app/models/comments.dart';
 import 'package:blog_app/models/user.dart';
 import 'package:blog_app/provider/user_provider.dart';
 import 'package:blog_app/resources/firestore_methods.dart';
+import 'package:blog_app/resources/storage_methods.dart';
+import 'package:blog_app/utils/Utils.dart';
 import 'package:blog_app/widgets/comment_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 
@@ -25,7 +31,7 @@ class _CommentScreenState extends State<CommentScreen> {
     super.dispose();
     _commentController.dispose();
   }
-
+bool _isuploading=false;
   @override
   Widget build(BuildContext context) {
     final UserModel user = Provider.of<UserProvider>(context).getUser;
@@ -88,20 +94,80 @@ class _CommentScreenState extends State<CommentScreen> {
                       ),
                     )
                 ),
-                InkWell(
-                  onTap:() async{
 
-                    //Posting Comments
-                    await FireStoreMethods().postComments(
-                        widget.snap['postId'],
-                        _commentController.text,
-                        user.uid,
-                        user.username,
-                        user.photoUrl
-                    );
-                    setState(() {
-                      _commentController.text="";
-                    });
+
+                IconButton(onPressed: () async{
+                  // Pick single images from gallery
+                  final ImagePicker picker = ImagePicker();
+                  final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+
+                  if(image !=null){
+                    print('Image Path :${image.path}');
+                    try{
+                      final file = File(image.path!);
+                      await StorageMethods().sendCommentImage(
+                          file,
+                          widget.snap['postId'].toString(),
+                          image.path.toString(),
+                          widget.snap['uid'].toString(),
+                          user.username.toString(),
+                          user.photoUrl.toString(),
+                          Typeu.image);
+                      setState(() {
+                        _isuploading=false;
+                      });
+                    }catch(e){
+                     print(e.toString());
+                    }
+                    }
+                },
+                    icon: Icon(Icons.photo,color: Colors.black,)),
+
+                IconButton(onPressed: () async{
+                  // Pick single images from camera
+                  final ImagePicker picker = ImagePicker();
+                  final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
+
+                  if(image !=null){
+                    print('Image Path :${image.path}');
+                    try{
+                      final file = File(image.path!);
+                      await StorageMethods().sendCommentImage(
+                          file,
+                          widget.snap['postId'].toString(),
+                          image.path.toString(),
+                          widget.snap['uid'].toString(),
+                          user.username.toString(),
+                          user.photoUrl.toString(),
+                          Typeu.image);
+                      setState(() {
+                        _isuploading=false;
+                      });
+                    }catch(e){
+                      print(e.toString());
+                    }
+                  }
+                },
+                    icon: Icon(Icons.camera_alt,color: Colors.black,)),
+
+                InkWell(
+                  onTap:() async {
+                    if (_commentController.text.isNotEmpty) {
+                      //Posting Comments
+                      await FireStoreMethods().postComments(
+                          widget.snap['postId'],
+                          _commentController.text,
+                          user.uid,
+                          user.username,
+                          user.photoUrl.toString(),
+                          Typeu.text
+                      );
+                      setState(() {
+                        _commentController.text = "";
+                      });
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 9,horizontal: 9),

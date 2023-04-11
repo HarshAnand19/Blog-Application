@@ -97,18 +97,21 @@ class _PostCardState extends State<PostCard> {
 
 
               //fetching the details from server(post image + post title + post desc)
-              ClipRRect(
-                borderRadius:BorderRadius.circular(10),
-                child: FadeInImage.assetNetwork(
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width * 1,
-                    height: MediaQuery.of(context).size.height * .25,
-                    placeholder: 'assets/images/firebase.png',
-                    image:widget.snap['postUrl']
-                ),
+          Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: FadeInImage.assetNetwork(
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width * 1,
+                height: MediaQuery.of(context).size.height * .25,
+                placeholder: 'assets/images/firebase.png',
+                image: widget.snap?['postUrl'] ?? 'assets/images/firebase.png',
               ),
+            ),
+          ),
 
-              Row(
+
+          Row(
                 children: [
 
                   //Like Button

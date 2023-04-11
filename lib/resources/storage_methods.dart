@@ -2,13 +2,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blog_app/resources/firestore_methods.dart';
 import 'package:blog_app/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:blog_app/models/comments.dart';
 class StorageMethods{
   final FirebaseStorage _storage =FirebaseStorage.instance;
   final FirebaseAuth _auth =FirebaseAuth.instance;
@@ -64,5 +65,18 @@ class StorageMethods{
   }catch(e){
     showSnackBar(e.toString(),context);
   }
+  }
+
+   Future<void> sendCommentImage(File file,String postId,String text,String uid,String name,String profilePic,Typeu type) async {
+
+
+    //storage file ref with path(path for storing images in cloud storage)
+    Reference ref = _storage.ref().child('commentImages').child(_auth.currentUser!.uid);
+
+    //uploading image
+    UploadTask uploadTask= ref.putFile(file);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl =await snap.ref.getDownloadURL();
+   await FireStoreMethods().postComments(postId, downloadUrl, uid, name, profilePic, Typeu.image);
   }
 }

@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
          Align(
              alignment: Alignment.center,
              child: Image.asset(
-               'assets/images/blogginglogo-removebg-preview.png',
+               'assets/images/sociotechflash.png',
               height: MediaQuery.of(context).size.height*.3,
                width: MediaQuery.of(context).size.width*.6,
                color: Colors.deepOrange,)

@@ -53,14 +53,12 @@ class _SplashScreenState extends State<SplashScreen> {
              alignment: Alignment.center,
              child: Image.asset(
                'assets/images/sociotechflash.png',
-              height: MediaQuery.of(context).size.height*.3,
-               width: MediaQuery.of(context).size.width*.6,
-               color: Colors.deepOrange,)
+               )
          ),
 
-          Text('Blog Application!',style: TextStyle
+          Text('Socio Tech Flash ',style: TextStyle
             (fontSize: 35,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,
-              color: Colors.deepOrange),
+              color: Colors.green),
           )
         ],
       ),

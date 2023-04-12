@@ -177,6 +177,9 @@ SizedBox(height: 12,),
                     TextFormField(
                       controller: titleController,
                       keyboardType:TextInputType.text,
+                      validator: (value){
+                        return value!.isEmpty?'enter title':null;
+                      },
                       decoration: InputDecoration(
                         focusedBorder:OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14.0),
@@ -198,6 +201,9 @@ SizedBox(height: 12,),
                     TextFormField(
                       controller: descController,
                       keyboardType:TextInputType.multiline,
+                      validator: (value){
+                        return value!.isEmpty?'enter description':null;
+                      },
                       minLines: 2,
                       maxLines: 5,
                       decoration: InputDecoration(
@@ -248,7 +254,7 @@ SizedBox(height: 12,),
         toastLength: isPositive?Toast.LENGTH_LONG:Toast.LENGTH_SHORT,
         gravity: ToastGravity.SNACKBAR,
         timeInSecForIosWeb: 1,
-        backgroundColor: isPositive? Colors.deepOrange:Colors.red,
+        backgroundColor: isPositive? Colors.blue:Colors.red,
         textColor: Colors.white,
         fontSize: 16.0
     );

@@ -19,8 +19,8 @@ scaffoldBackgroundColor: Colors.white,
     colorScheme: ColorScheme.light(),
       textTheme: TextTheme(bodyText1: TextStyle(color: Colors.black)),
       iconTheme: IconThemeData(color: Colors.white),
-      appBarTheme: AppBarTheme(backgroundColor: Colors.deepOrange),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.deepOrange)
+      appBarTheme: AppBarTheme(backgroundColor: Colors.green),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.green)
 
   );
 }

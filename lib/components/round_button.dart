@@ -15,7 +15,7 @@ class RoundButton extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child:MaterialButton(
         minWidth: double.infinity,
-        color: Colors.deepOrange,
+        color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
         height: mq.height*.06,
         onPressed:  onPress,
         child: Text(title,style: TextStyle(color: Colors.white),),

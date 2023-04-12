@@ -113,7 +113,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
 
                         //login button
-                        RoundButton(title: 'Login', onPress: () async {
+                        RoundButton(title: 'Login',
+
+                            onPress: () async {
                           if(_formkey.currentState!.validate()){
 
                             setState(() {
@@ -184,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
         toastLength: isPositive?Toast.LENGTH_LONG:Toast.LENGTH_SHORT,
         gravity: ToastGravity.SNACKBAR,
         timeInSecForIosWeb: 1,
-        backgroundColor: isPositive? Colors.deepOrange:Colors.red,
+        backgroundColor: isPositive? Colors.blue:Colors.red,
         textColor: Colors.white,
         fontSize: 16.0
     );

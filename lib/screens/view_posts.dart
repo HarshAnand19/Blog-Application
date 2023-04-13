@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -14,7 +16,8 @@ class ViewPosts extends StatelessWidget {
   final String date;
   final String time;
   final String profImage;
-
+final String postId;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   ViewPosts({
     Key? key,
     required this.title,
@@ -24,10 +27,13 @@ class ViewPosts extends StatelessWidget {
     required this.date,
     required this.time,
     required this.profImage,
+    required this.postId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -121,9 +127,8 @@ class ViewPosts extends StatelessWidget {
         btnCancelOnPress: () {
         },
         btnOkOnPress: () {
-          // postRef.child('Post List').child(widget.id).remove();
-          // final ref =storage.ref().child('PostImages/').child(widget.id).delete();
-          // Navigator.pop(context);
+          _firestore.collection('posts').doc(postId).delete();
+          Navigator.pop(context);
         }
     )..show();
   }

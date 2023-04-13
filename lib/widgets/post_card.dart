@@ -56,6 +56,7 @@ class _PostCardState extends State<PostCard> {
               date: widget.snap['datePublished'],
               time: widget.snap['timePublished'],
             profImage: widget.snap['profImage'],
+            postId: widget.snap['postId'],
           )
       ));
         },

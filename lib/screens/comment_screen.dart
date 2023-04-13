@@ -86,6 +86,8 @@ bool _isuploading=false;
                     child:Padding(
                       padding: EdgeInsets.only(left: 16,right: 8),
                       child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
                         controller: _commentController,
                         decoration: InputDecoration(
                             hintText: 'Enter a Comment ${user.username}',
@@ -122,7 +124,7 @@ bool _isuploading=false;
                     }
                     }
                 },
-                    icon: Icon(Icons.photo,color: Colors.black,)),
+                    icon: Icon(Icons.photo,color:Theme.of(context).textTheme.bodyText1!.color,)),
 
                 IconButton(onPressed: () async{
                   // Pick single images from camera
@@ -150,7 +152,7 @@ bool _isuploading=false;
                     }
                   }
                 },
-                    icon: Icon(Icons.camera_alt,color: Colors.black,)),
+                    icon: Icon(Icons.camera_alt,color:Theme.of(context).textTheme.bodyText1!.color,)),
 
                 InkWell(
                   onTap:() async {
@@ -171,7 +173,7 @@ bool _isuploading=false;
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 9,horizontal: 9),
-                    child: Text('Post',style: TextStyle(color: Colors.blue),),
+                    child: Text('Post',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
                   ),
                 )
               ],

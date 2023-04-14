@@ -1,5 +1,7 @@
 import 'package:blog_app/models/comments.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +15,7 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
-
+String username="";
   @override
   Widget build(BuildContext context) {
 
@@ -36,16 +38,29 @@ class _CommentCardState extends State<CommentCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                 widget.snap['type'] == 'text'?
-                RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(text: widget.snap['name'],
-                              style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color)),
-                          TextSpan(text: '  ${widget.snap['text']}',
-                              style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color)),
-                        ]
-                    )
-                ):
+               Row(
+                 children: [
+                   //username
+                   widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
+                   StreamBuilder<DocumentSnapshot>(
+                     stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                     builder: (context, snapshot) {
+                       if (snapshot.hasData) {
+                         Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                         username = data['username'];
+                         return Text(' ${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
+                       } else {
+                         return Text('${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
+                       }
+                     },
+                   ):
+                   Text(widget.snap['name'], style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color)),
+
+
+                   Text('  ${widget.snap['text']}', style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color))
+                 ],
+               ):
+
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: CachedNetworkImage(

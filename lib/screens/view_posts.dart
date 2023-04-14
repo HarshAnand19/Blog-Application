@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,7 +33,7 @@ final String postId;
 
   @override
   Widget build(BuildContext context) {
-
+FirebaseAuth _auth =FirebaseAuth.instance;
 
     return Scaffold(
       appBar: AppBar(
@@ -47,6 +48,8 @@ final String postId;
               },
               icon: Icon(Icons.share),
             ),
+
+            if(id == _auth.currentUser!.uid)
             IconButton(
               onPressed: () {
             _showDialog(context);

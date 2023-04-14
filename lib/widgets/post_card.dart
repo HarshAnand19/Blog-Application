@@ -7,6 +7,7 @@ import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/utils/Utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,8 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   int commentLength=0;
   FirebaseFirestore _firestore =FirebaseFirestore.instance;
+  String username="";
+  String photoUrl="";
   @override
   void initState() {
     // TODO: implement initState
@@ -75,10 +78,33 @@ class _PostCardState extends State<PostCard> {
                 padding: const EdgeInsets.all(7.0),
                 child: Row(
                   children: [
-                    CircleAvatar(
+
+                    //profile picture
+                    widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
+                StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+              photoUrl = data['photoUrl'];
+              return  CircleAvatar(
+                backgroundImage: NetworkImage(photoUrl),
+              );
+            } else {
+              return  CircleAvatar(
+                backgroundImage: NetworkImage(photoUrl),
+              );
+            }
+          },
+        )
+                    :CircleAvatar(
                       radius: 24,
                       backgroundImage: NetworkImage(widget.snap['profImage']),
                     ),
+
+
+
+
                     SizedBox(width: 10.0),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,6 +116,20 @@ class _PostCardState extends State<PostCard> {
                             Text(widget.snap['timePublished'],style: TextStyle(fontWeight: FontWeight.bold),)
                           ],
                         ),
+                        //username
+                        widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
+                        StreamBuilder<DocumentSnapshot>(
+                          stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                              username = data['username'];
+                              return Text(' ${username}');
+                            } else {
+                              return Text('${username}');
+                            }
+                          },
+                        ):
                         Text(widget.snap['username'])
                       ],
                     ),

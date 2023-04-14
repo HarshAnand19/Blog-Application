@@ -8,13 +8,15 @@ import 'package:intl/intl.dart';
 
 class CommentCard extends StatefulWidget {
   final snap;
-  const CommentCard({Key? key,required this.snap}) : super(key: key);
+  final String postId;
+  const CommentCard({Key? key,required this.snap, required this.postId}) : super(key: key);
 
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
+  FirebaseFirestore _firestore=FirebaseFirestore.instance;
 String username="";
   @override
   Widget build(BuildContext context) {
@@ -39,37 +41,54 @@ String username="";
                 children: [
                 widget.snap['type'] == 'text'?
                Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [
                    //username
-                   widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
-                   StreamBuilder<DocumentSnapshot>(
-                     stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                     builder: (context, snapshot) {
-                       if (snapshot.hasData) {
-                         Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                         username = data['username'];
-                         return Text(' ${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
-                       } else {
-                         return Text('${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
-                       }
-                     },
-                   ):
-                   Text(widget.snap['name'], style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color)),
+                   Row(
+                     children: [
+                       widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
+                       StreamBuilder<DocumentSnapshot>(
+                         stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                         builder: (context, snapshot) {
+                           if (snapshot.hasData) {
+                             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                             username = data['username'];
+                             return Text(' ${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
+                           } else {
+                             return Text('${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
+                           }
+                         },
+                       ):
+                       Text(widget.snap['name'], style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color)),
 
+                       Text('  ${widget.snap['text']}', style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color))
+                     ],
+                   ),
 
-                   Text('  ${widget.snap['text']}', style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color))
+                  if( widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid)
+                   IconButton(
+                     onPressed: () => showCommentsOptionsDialogText(context, widget.postId.toString()),
+                     icon: Icon(Icons.more_vert,color: Theme.of(context).textTheme.bodyText1!.color),
+                   )
                  ],
                ):
 
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: CachedNetworkImage(
-                      imageUrl: widget.snap['text'],
-                      placeholder: (context, url) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(strokeWidth: 2,),
-                      ),
-                      errorWidget: (context, url, error) => Icon(Icons.image,size: 70,color: Colors.red,)
+                InkWell(
+                  onLongPress: () {
+                    if (widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+                      showCommentsOptionsDialogImage(context, widget.postId.toString());
+                    }
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: CachedNetworkImage(
+                        imageUrl: widget.snap['text'],
+                        placeholder: (context, url) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(strokeWidth: 2,),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.image,size: 70,color: Colors.red,)
+                    ),
                   ),
                 ),
 
@@ -98,6 +117,65 @@ String username="";
           //   ],
           // )
         ],
+      ),
+    );
+  }
+
+  //Delete and Edit Dialog Option
+  void showCommentsOptionsDialogText(BuildContext context, String postId) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          shrinkWrap: true,
+          children: [
+            InkWell(
+              onTap: () async {
+                _firestore.collection('posts').doc(postId).collection('comments').doc(widget.snap['commentId']).delete();
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Text('Delete'),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                // TODO: Implement edit functionality
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Text('Edit'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showCommentsOptionsDialogImage(BuildContext context, String postId) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          shrinkWrap: true,
+          children: [
+            InkWell(
+              onTap: () async {
+                _firestore.collection('posts').doc(postId).collection('comments').doc(widget.snap['commentId']).delete();
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Text('Delete'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

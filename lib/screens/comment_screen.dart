@@ -59,6 +59,7 @@ bool _isuploading=false;
               itemBuilder:(context,index){
                 return  CommentCard(
                   snap: (snapshot.data! as dynamic).docs[index].data(),
+                  postId: widget.snap['postId'],
                 );
               }
           );

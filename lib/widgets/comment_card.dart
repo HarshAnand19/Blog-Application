@@ -18,6 +18,14 @@ class CommentCard extends StatefulWidget {
 class _CommentCardState extends State<CommentCard> {
   FirebaseFirestore _firestore=FirebaseFirestore.instance;
 String username="";
+late String _updatedComment;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _updatedComment=widget.snap['text'];
+}
   @override
   Widget build(BuildContext context) {
 
@@ -105,17 +113,6 @@ String username="";
             ),
           ),
 
-          //Like Button
-          // Column(
-          //   children: [
-          //     Container(
-          //       padding: EdgeInsets.all(8),
-          //       child: Icon(Icons.favorite_outline,size: 16,color: Colors.red,),
-          //     ),
-          //
-          //     Text("10")
-          //   ],
-          // )
         ],
       ),
     );
@@ -142,8 +139,7 @@ String username="";
             ),
             InkWell(
               onTap: () {
-                // TODO: Implement edit functionality
-                Navigator.of(context).pop();
+               _showEditDialog(context);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -166,7 +162,7 @@ String username="";
           children: [
             InkWell(
               onTap: () async {
-                _firestore.collection('posts').doc(postId).collection('comments').doc(widget.snap['commentId']).delete();
+                await _firestore.collection('posts').doc(postId).collection('comments').doc(widget.snap['commentId']).delete();
                 Navigator.of(context).pop();
               },
               child: Container(
@@ -177,6 +173,73 @@ String username="";
           ],
         ),
       ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context) {
+    String updatedComment = widget.snap['text'];
+Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          icon: Icon(Icons.edit,color: Colors.blue,),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          elevation: 5.0,
+          title: Text("Edit Your Comment"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                TextFormField(
+                  initialValue:widget.snap['text'],
+                  onChanged: (value) => updatedComment = value,
+                  decoration: InputDecoration(
+                    labelText: 'Comment',
+                    labelStyle: TextStyle(color: Colors.blue),
+                    hintText: "Enter updated Comment",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0)
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(
+                        width: 1.8,
+                        color: Colors.blue,
+                      ),
+                    ),
+
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Update",style: TextStyle(color: Colors.blue),),
+              onPressed: () {
+                _firestore.collection('posts').doc(widget.postId).collection('comments').doc(widget.snap['commentId']).update({
+                  'text': updatedComment,
+                }).then((value) {
+                  setState(() {
+                    // Rebuild the widget with the updated values
+                    widget.snap['text'] = _updatedComment;
+                  });
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

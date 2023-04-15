@@ -73,7 +73,7 @@ FirebaseAuth _auth =FirebaseAuth.instance;
                 },
                 icon: Icon(Icons.edit),
               ),
-            
+
             if(widget.id == _auth.currentUser!.uid)
             IconButton(
               onPressed: () {
@@ -235,8 +235,8 @@ FirebaseAuth _auth =FirebaseAuth.instance;
             ),
             TextButton(
               child: Text("Save",style: TextStyle(color: Colors.blue),),
-              onPressed: () {
-                _firestore.collection('posts').doc(widget.postId).update({
+              onPressed: () async{
+               await _firestore.collection('posts').doc(widget.postId).update({
                   'title': updatedTitle,
                   'description': updatedDesc,
                 }).then((value) {

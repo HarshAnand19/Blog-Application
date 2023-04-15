@@ -194,6 +194,7 @@ Navigator.pop(context);
 
                 TextFormField(
                   initialValue:widget.snap['text'],
+                  maxLines: null,
                   onChanged: (value) => updatedComment = value,
                   decoration: InputDecoration(
                     labelText: 'Comment',

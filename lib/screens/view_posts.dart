@@ -57,7 +57,13 @@ FirebaseAuth _auth =FirebaseAuth.instance;
         title: Row(
           children: [
             Expanded(
-              child: Text(widget.title ?? ''),
+              child: Tooltip(
+                message: widget.title ?? '',
+                child: Text(
+                  widget.title ?? '',
+                  overflow: TextOverflow.fade,
+                ),
+              ),
             ),
             IconButton(
               onPressed: () {
@@ -181,6 +187,7 @@ FirebaseAuth _auth =FirebaseAuth.instance;
               children: [
                 TextFormField(
                   initialValue:widget.title,
+                  maxLines: null,
                   onChanged: (value) => updatedTitle = value,
                   decoration: InputDecoration(
                     labelText: 'Title',

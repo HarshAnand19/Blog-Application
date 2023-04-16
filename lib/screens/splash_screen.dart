@@ -55,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
                'assets/images/sociotechflash.png',
                )
          ),
-          
         ],
       ),
 

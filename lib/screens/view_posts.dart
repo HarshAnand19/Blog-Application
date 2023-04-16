@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blog_app/screens/full_screen_image_preview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -99,10 +100,19 @@ FirebaseAuth _auth =FirebaseAuth.instance;
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              width: double.infinity,
-              widget.photo,
-              height: MediaQuery.of(context).size.height*.4,
+            GestureDetector(
+              onTap: (){
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                 FullScreenImagePreview(heroTag:'imageTag' , imageUrl: widget.photo)));
+              },
+              child: Hero(
+                tag: 'imageTag',
+                child: Image.network(
+                  width: double.infinity,
+                  widget.photo,
+                  height: MediaQuery.of(context).size.height*.4,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),

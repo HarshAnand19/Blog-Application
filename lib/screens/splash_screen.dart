@@ -55,11 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                'assets/images/sociotechflash.png',
                )
          ),
-
-          Text('Socio Tech Flash ',style: TextStyle
-            (fontSize: 35,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,
-              color: Colors.green),
-          )
+          
         ],
       ),
 

@@ -17,15 +17,15 @@ class CommentCard extends StatefulWidget {
 
 class _CommentCardState extends State<CommentCard> {
   FirebaseFirestore _firestore=FirebaseFirestore.instance;
-String username="";
-late String _updatedComment;
+  String username="";
+  late String _updatedComment;
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _updatedComment=widget.snap['text'];
-}
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -47,66 +47,67 @@ late String _updatedComment;
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                widget.snap['type'] == 'text'?
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                   //username
-                   Row(
-                     children: [
-                       widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
-                       StreamBuilder<DocumentSnapshot>(
-                         stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                         builder: (context, snapshot) {
-                           if (snapshot.hasData) {
-                             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                             username = data['username'];
-                             return Text(' ${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
-                           } else {
-                             return Text('${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
-                           }
-                         },
-                       ):
-                       Text(widget.snap['name'], style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color)),
+                  widget.snap['type'] == 'text'?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //username
+                      Row(
+                        children: [
+                          widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
+                          StreamBuilder<DocumentSnapshot>(
+                            stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                                username = data['username'];
+                                return Text(' ${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
+                              } else {
+                                return Text('${username}', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color));
+                              }
+                            },
+                          ):
+                          Text(widget.snap['name'], style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.bodyText1!.color)),
 
-                       Text('  ${widget.snap['text']}', style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color))
-                     ],
-                   ),
 
-                  if( widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid)
-                   IconButton(
-                     onPressed: () => showCommentsOptionsDialogText(context, widget.postId.toString()),
-                     icon: Icon(Icons.more_vert,color: Theme.of(context).textTheme.bodyText1!.color),
-                   )
-                 ],
-               ):
+                        ],
+                      ),
+                      SizedBox(height: 16,width: 10,),
+                      Flexible(
+                        child: Text('${widget.snap['text']}', style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color)),
+                      ),
+                      if( widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid)
+                        IconButton(
+                          onPressed: () => showCommentsOptionsDialogText(context, widget.postId.toString()),
+                          icon: Icon(Icons.more_vert,color: Theme.of(context).textTheme.bodyText1!.color),
+                        )
+                    ],
+                  ):
 
-                InkWell(
-                  onLongPress: () {
-                    if (widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid) {
-                      showCommentsOptionsDialogImage(context, widget.postId.toString());
-                    }
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: CachedNetworkImage(
-                        imageUrl: widget.snap['text'],
-                        placeholder: (context, url) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(strokeWidth: 2,),
-                        ),
-                        errorWidget: (context, url, error) => Icon(Icons.image,size: 70,color: Colors.red,)
+                  InkWell(
+                    onLongPress: () {
+                      if (widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+                        showCommentsOptionsDialogImage(context, widget.postId.toString());
+                      }
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: CachedNetworkImage(
+                          imageUrl: widget.snap['text'],
+                          placeholder: (context, url) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(strokeWidth: 2,),
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.image,size: 70,color: Colors.red,)
+                      ),
                     ),
                   ),
-                ),
 
 
-                  Padding(
-                    padding:EdgeInsets.only(top: 4),
-                    child: Text(
-                      widget.snap['datePublished'],
-                      style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),
-                    ),
+                  Text(
+                    widget.snap['datePublished'],
+                    style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),
                   )
                 ],
               ),
@@ -139,7 +140,7 @@ late String _updatedComment;
             ),
             InkWell(
               onTap: () {
-               _showEditDialog(context);
+                _showEditDialog(context);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -178,7 +179,7 @@ late String _updatedComment;
 
   void _showEditDialog(BuildContext context) {
     String updatedComment = widget.snap['text'];
-Navigator.pop(context);
+    Navigator.pop(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {

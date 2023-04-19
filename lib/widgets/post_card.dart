@@ -110,9 +110,10 @@ class _PostCardState extends State<PostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+
                           children: [
                             Text(widget.snap['datePublished'],style: TextStyle(fontWeight: FontWeight.bold),),
-                            SizedBox(width: 30,),
+                            SizedBox(width: 23,),
                             Text(widget.snap['timePublished'],style: TextStyle(fontWeight: FontWeight.bold),)
                           ],
                         ),
@@ -215,7 +216,7 @@ class _PostCardState extends State<PostCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(widget.snap['title'],style: TextStyle(fontSize:16,fontWeight: FontWeight.bold)),
-                          Text(widget.snap['description'],style: TextStyle(fontSize:14)),
+                          Text('View Full Post',style: TextStyle(color:Colors.blue,fontSize:14,fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),

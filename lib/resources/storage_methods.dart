@@ -73,6 +73,9 @@ class StorageMethods{
     //storage file ref with path(path for storing images in cloud storage)
     Reference ref = _storage.ref().child('commentImages').child(_auth.currentUser!.uid);
 
+    String id = Uuid().v1();
+    ref = ref.child(id);
+
     //uploading image
     UploadTask uploadTask= ref.putFile(file);
     TaskSnapshot snap = await uploadTask;

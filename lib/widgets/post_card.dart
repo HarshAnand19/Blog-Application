@@ -225,7 +225,24 @@ class _PostCardState extends State<PostCard> {
                       onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>CommentScreen(snap: widget.snap,))),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Text('View all ${commentLength} comments',style: TextStyle(fontWeight: FontWeight.w400),),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<DocumentSnapshot> comments = snapshot.data!.docs;
+                              return InkWell(
+                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CommentScreen(snap: widget.snap))),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                  child: Text('View all ${comments.length} comments', style: TextStyle(fontWeight: FontWeight.w400)),
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+
                       ),
                     ),
                   ],

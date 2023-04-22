@@ -115,7 +115,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
       inAsyncCall: showSpinner,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Upload Your Blogs'),
+          title: Text('Upload Your Query'),
           centerTitle: true,
         ),
 
@@ -260,72 +260,7 @@ SizedBox(height: 12,),
     );
   }
 
-  // void createPost(
-  //     String uid,
-  //     String username,
-  //     String profImage,
-  //     )
-  // async{
-  //     setState(() {
-  //       showSpinner=true;
-  //     });
-  //
-  //     try{
-  //
-  //       final User? user=_auth.currentUser;
-  //       //uploading post to firebase storage
-  //       int date = DateTime.now().millisecondsSinceEpoch;
-  //
-  //       //uploading image to firebase storage
-  //       final ref =storage.ref().child('PostImages/$date');
-  //       UploadTask uploadTask=ref.putFile(_image!.absolute);
-  //       await Future.value(uploadTask);
-  //
-  //       // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('/blogapp$date');
-  //       // UploadTask uploadTask =ref.putFile(_image!.absolute);
-  //       // await Future.value(uploadTask);
-  //       var newUrl =await ref.getDownloadURL();
-  //
-  //       var date1=DateTime.now();
-  //       var postDateKey =DateFormat('MMM d,yyyy');
-  //       var postTimeKey =DateFormat('EEEE,hh:mm aaa');
-  //       String formatDate=postDateKey.format(date1);
-  //       String formatTime=postTimeKey.format(date1);
-  //       //uploading post to firebase database
-  //
-  //       postRef.child('Post List').child(date.toString()).set({
-  //
-  //         'pId':date.toString(),
-  //         'pImage':newUrl.toString(),
-  //         'pTime':date.toString(),
-  //         'pTitle':titleController.text.toString(),
-  //         'pDesc':descController.text.toString(),
-  //         'uEmail':user?.email.toString(),
-  //         'uid':user?.uid.toString(),
-  //         'uploadDate':formatDate.toString(),
-  //         'uploadTime':formatTime.toString()
-  //
-  //       }).then((value) {
-  //         toastMessages('Post  Uploaded Successfully!',true);
-  //         Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen(name: user!.displayName.toString())));
-  //         setState(() {
-  //           showSpinner=false;
-  //         });
-  //       }).onError((error, stackTrace){
-  //         toastMessages(error.toString(), false);
-  //         setState(() {
-  //           showSpinner=false;
-  //         });
-  //       });
-  //
-  //     }catch(e){
-  //       setState(() {
-  //         showSpinner=false;
-  //       });
-  //       toastMessages(e.toString(),false);
-  //     }
-  //
-  // }
+
 
 void createPosts(
     String uid,

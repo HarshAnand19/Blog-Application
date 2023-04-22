@@ -21,7 +21,7 @@ class _MyBlogsState extends State<MyBlogs> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Blogs'),
+        title: Text('My Posts'),
       ),
       body: Column(
         children: [

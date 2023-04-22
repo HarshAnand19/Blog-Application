@@ -74,7 +74,7 @@ class _CommentCardState extends State<CommentCard> {
                         ],
                       ),
                       SizedBox(height: 16,width: 10,),
-                      Flexible(
+                      Flexible(fit: FlexFit.tight,
                         child: Text('${widget.snap['text']}', style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color)),
                       ),
                       if( widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid)

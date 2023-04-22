@@ -66,12 +66,12 @@ FirebaseAuth _auth =FirebaseAuth.instance;
                 ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                _sharefiles();
-              },
-              icon: Icon(Icons.share),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     _sharefiles();
+            //   },
+            //   icon: Icon(Icons.share),
+            // ),
 
             if(widget.id == _auth.currentUser!.uid)
               IconButton(
@@ -168,16 +168,16 @@ FirebaseAuth _auth =FirebaseAuth.instance;
     )..show();
   }
 
-  void _sharefiles() async{
-    String doc ="Hey! Checkout this blog, \n Title - ${widget.title}\n Description - ${widget.desc} ";
-    http.Response response = await http.get(Uri.parse(widget.photo));
-    final directory = await getTemporaryDirectory();
-    final path = directory.path;
-    final file = File('$path/image.png');
-    file.writeAsBytes(response.bodyBytes);
-    Share.shareFiles(['$path/image.png'],text: doc,);
-
-  }
+  // void _sharefiles() async{
+  //   String doc ="Hey! Checkout this blog, \n Title - ${widget.title}\n Description - ${widget.desc} ";
+  //   http.Response response = await http.get(Uri.parse(widget.photo));
+  //   final directory = await getTemporaryDirectory();
+  //   final path = directory.path;
+  //   final file = File('$path/image.png');
+  //   file.writeAsBytes(response.bodyBytes);
+  //   Share.shareFiles(['$path/image.png'],text: doc,);
+  //
+  // }
 
   void _showEditDialog(BuildContext context) {
     String updatedTitle = widget.title;

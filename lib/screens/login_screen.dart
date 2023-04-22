@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child:Text('Forgot Password ?'),
+                          child:Text('Forgot Password ?',style: TextStyle(fontWeight: FontWeight.bold),),
                         ),
                       ),
                     ),

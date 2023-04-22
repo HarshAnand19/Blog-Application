@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     ListTile(
                       leading: Icon(Icons.edit),
-                      title: Text('My Blogs'),
+                      title: Text('My Posts'),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>MyBlogs()));
                       },

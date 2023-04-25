@@ -41,7 +41,6 @@ String? _image;
 
   }
 
-
   FirebaseAuth auth=FirebaseAuth.instance;
   FirebaseFirestore _firestore=FirebaseFirestore.instance;
 
@@ -100,6 +99,8 @@ String? _image;
 
                 SizedBox(width: mq.width,height: mq.height*.03,),
 
+
+                //Profile picture
                 Stack(
                   children: [
 
@@ -180,6 +181,7 @@ String? _image;
 
                 SizedBox(height: mq.height*.05,),
 
+                //Update Button
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -217,6 +219,7 @@ String? _image;
         ),
       ),
 
+      //Logout Button
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: 10),
         child: FloatingActionButton.extended(
@@ -248,6 +251,7 @@ String? _image;
     ).show();
   }
 
+  //for selecting images from camera and gallery in a bottom sheet and updating profile picture
  void _showBottomSheet(){
    showModalBottomSheet(context: context,
        shape:RoundedRectangleBorder(borderRadius: BorderRadius.only
@@ -264,6 +268,7 @@ String? _image;
              ),
 
              SizedBox(height: mq.height*.02,),
+
              //buttons for picking images
              Row(
                mainAxisAlignment: MainAxisAlignment.spaceEvenly,

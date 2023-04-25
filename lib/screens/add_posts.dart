@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +29,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   bool showSpinner=false;
 
-  final postRef = FirebaseDatabase.instance.reference().child('Posts');
   firebase_storage.FirebaseStorage storage=firebase_storage.FirebaseStorage.instance;
 final FirebaseAuth _auth =FirebaseAuth.instance;
 
@@ -52,7 +50,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
        child: Column(
          children: [
 
-           //For Camera
+           //For selecting images from Camera
            InkWell(
              onTap: (){
                getImageCamera();
@@ -64,7 +62,7 @@ final FirebaseAuth _auth =FirebaseAuth.instance;
              ),
            ),
 
-           //For Gallery
+           //For selecting images from Gallery
            InkWell(
              onTap: (){
                getImageGallery();
@@ -172,7 +170,7 @@ SizedBox(height: 12,),
                Form(
                 child:Column(
 
-                  //title
+                  //for entering the title
                   children: [
                     TextFormField(
                       controller: titleController,
@@ -197,7 +195,7 @@ SizedBox(height: 12,),
 
                     SizedBox(height: 25,),
 
-                    //Description
+                    //for entering the Description
                     TextFormField(
                       controller: descController,
                       keyboardType:TextInputType.multiline,
@@ -229,7 +227,6 @@ SizedBox(height: 12,),
                SizedBox(height: 30,),
 
                ElevatedButton(
-
                  style: ElevatedButton.styleFrom(
                    shape: StadiumBorder(),
                      minimumSize: Size.fromHeight(40),
@@ -261,7 +258,7 @@ SizedBox(height: 12,),
   }
 
 
-
+//for uploading the posts to database
 void createPosts(
     String uid,
     String username,

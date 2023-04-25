@@ -36,7 +36,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
-//email field
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 child: Form(
@@ -44,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: Column(
                       children: [
 
-                        //email field
+                        //for entering the email
                         TextFormField(
                           controller:emailController,
                           keyboardType: TextInputType.emailAddress,
@@ -64,7 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
 
 
-                        //login button
+                        //recover button
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 40),
                           child: RoundButton(title: 'Recover Password', onPress: () async {

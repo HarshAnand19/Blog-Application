@@ -4,7 +4,6 @@ import 'package:blog_app/screens/add_posts.dart';
 import 'package:blog_app/screens/bookmark_screen.dart';
 import 'package:blog_app/screens/login_screen.dart';
 import 'package:blog_app/screens/my_blogs.dart';
-import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/register_screen.dart';
 import 'package:blog_app/screens/search_blogs.dart';
 import 'package:blog_app/screens/view_posts.dart';
@@ -30,8 +29,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  //Get reference of firebase database
-  final dbRef=FirebaseDatabase.instance.reference().child('Posts');
+
   FirebaseFirestore _firestore= FirebaseFirestore.instance;
 
   FirebaseAuth auth=FirebaseAuth.instance;
@@ -79,6 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           iconTheme: Theme.of(context).iconTheme,
+
+          //to listen and update username of current user in real time
           title: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
             builder: (context, snapshot) {
@@ -95,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             //dark theme
             ChangeThemeButtonWidget(),
-
           ],
         ),
 
@@ -108,26 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              //search field
-         //      TextFormField(
-         //        controller:searchController,
-         //        decoration: InputDecoration(
-         //          focusedBorder:OutlineInputBorder(
-         //              borderRadius: BorderRadius.circular(35.0),
-         //             borderSide: BorderSide(color: Theme.of(context).floatingActionButtonTheme.backgroundColor!)
-         //          ),
-         //            border: OutlineInputBorder(
-         //              borderRadius: BorderRadius.circular(35.0)
-         //            ),
-         //            hintText: 'Search a blog title',
-         //            prefixIcon: Icon(Icons.search,color:Theme.of(context).floatingActionButtonTheme.backgroundColor! ,),
-         //        ),
-         //        onChanged: (String value){
-         // setState(() {
-         //   search=value;
-         // });
-         //        },
-         //      ),
 
               Expanded(
 

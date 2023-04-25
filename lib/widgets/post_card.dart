@@ -3,7 +3,6 @@ import 'package:blog_app/provider/user_provider.dart';
 import 'package:blog_app/resources/firestore_methods.dart';
 import 'package:blog_app/screens/comment_screen.dart';
 import 'package:blog_app/screens/view_posts.dart';
-import 'package:blog_app/screens/view_profile.dart';
 import 'package:blog_app/utils/Utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +12,7 @@ import 'package:provider/provider.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
+
   const PostCard({Key? key, required this.snap}) : super(key: key);
 
   @override
@@ -20,26 +20,30 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  int commentLength=0;
-  FirebaseFirestore _firestore =FirebaseFirestore.instance;
-  String username="";
-  String photoUrl="";
+  int commentLength = 0;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String username = "";
+  String photoUrl = "";
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getComments();
   }
-  void getComments() async{
- try{
-   QuerySnapshot snap=await _firestore.collection('posts').doc(widget.snap['postId']).collection('comments').get();
-   commentLength=snap.docs.length;
- }catch(e){
-   showSnackBar(e.toString(), context);
- }
- setState(() {
 
- });
+  void getComments() async {
+    try {
+      QuerySnapshot snap = await _firestore
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .get();
+      commentLength = snap.docs.length;
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+    setState(() {});
   }
 
   @override
@@ -49,103 +53,120 @@ class _PostCardState extends State<PostCard> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: (){
-      Navigator.push(context,MaterialPageRoute(builder: (context) =>
-          ViewPosts(
-              title: widget.snap['title'],
-               desc: widget.snap['description'],
-               photo: widget.snap['postUrl'],
-              id: widget.snap['uid'],
-              date: widget.snap['datePublished'],
-              time: widget.snap['timePublished'],
-            profImage: widget.snap['profImage'],
-            postId: widget.snap['postId'],
-          )
-      ));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewPosts(
+                        title: widget.snap['title'],
+                        desc: widget.snap['description'],
+                        photo: widget.snap['postUrl'],
+                        id: widget.snap['uid'],
+                        date: widget.snap['datePublished'],
+                        time: widget.snap['timePublished'],
+                        profImage: widget.snap['profImage'],
+                        postId: widget.snap['postId'],
+                      )));
         },
         child: Card(
           color: Theme.of(context).primaryColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 2.5,
           borderOnForeground: true,
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Padding(
                 padding: const EdgeInsets.all(7.0),
                 child: Row(
                   children: [
 
                     //profile picture
-                    widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
-                StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-              photoUrl = data['photoUrl'];
-              return  CircleAvatar(
-                backgroundImage: NetworkImage(photoUrl),
-              );
-            } else {
-              return  CircleAvatar(
-                backgroundImage: NetworkImage(photoUrl),
-              );
-            }
-          },
-        )
-                    :CircleAvatar(
-                      radius: 24,
-                      backgroundImage: NetworkImage(widget.snap['profImage']),
-                    ),
-
-
-
+                    widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid
+                        ? StreamBuilder<DocumentSnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                Map<String, dynamic> data = snapshot.data!
+                                    .data() as Map<String, dynamic>;
+                                photoUrl = data['photoUrl'];
+                                return CircleAvatar(
+                                  backgroundImage: NetworkImage(photoUrl),
+                                );
+                              } else {
+                                return CircleAvatar(
+                                  backgroundImage: NetworkImage(photoUrl),
+                                );
+                              }
+                            },
+                          )
+                        : CircleAvatar(
+                            radius: 24,
+                            backgroundImage:
+                                NetworkImage(widget.snap['profImage']),
+                          ),
 
                     SizedBox(width: 10.0),
+
+                    //date and time published of post
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-
                           children: [
-                            Text(widget.snap['datePublished'],style: TextStyle(fontWeight: FontWeight.bold),),
-                            SizedBox(width: 23,),
-                            Text(widget.snap['timePublished'],style: TextStyle(fontWeight: FontWeight.bold),)
+                            Text(
+                              widget.snap['datePublished'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 23,
+                            ),
+                            Text(
+                              widget.snap['timePublished'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
                           ],
                         ),
+
                         //username
-                        widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid?
-                        StreamBuilder<DocumentSnapshot>(
-                          stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                              username = data['username'];
-                              return Text(' ${username}');
-                            } else {
-                              return Text('${username}');
-                            }
-                          },
-                        ):
-                        Text(widget.snap['username'])
+                        widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid
+                            ? StreamBuilder<DocumentSnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    Map<String, dynamic> data = snapshot.data!
+                                        .data() as Map<String, dynamic>;
+                                    username = data['username'];
+                                    return Text(' ${username}');
+                                  } else {
+                                    return Text('${username}');
+                                  }
+                                },
+                              )
+                            : Text(widget.snap['username'])
                       ],
                     ),
                   ],
                 ),
               ),
 
+              //fetching the details from server(post image + post title)
 
-              //fetching the details from server(post image + post title + post desc)
+              //post image
               Container(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
                     imageUrl: widget.snap['postUrl'],
-                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                     width: MediaQuery.of(context).size.width * 1,
                     height: MediaQuery.of(context).size.height * .25,
@@ -154,40 +175,56 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
 
-
-          Row(
+              Row(
                 children: [
 
                   //Like Button
-                  IconButton(onPressed: () async{
-                    await FireStoreMethods().likePost(widget.snap['postId'], user.uid,widget.snap['likes']);
+                  IconButton(
+                      onPressed: () async {
+                        await FireStoreMethods().likePost(widget.snap['postId'],
+                            user.uid, widget.snap['likes']);
+                      },
 
-                  },
-                      icon:
                       //check whether to like or not
-                      widget.snap['likes'].contains(user.uid)?
-                      Icon(Icons.favorite,color: Colors.red,):
-                      Icon(Icons.favorite_border_outlined,color: Colors.red,)
-                  ),
+                      icon: widget.snap['likes'].contains(user.uid)
+                              ? Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                )
+                              : Icon(
+                                  Icons.favorite_border_outlined,
+                                  color: Colors.red,
+                                )),
 
-                  
                   //Comment Button
-                  IconButton(onPressed:() => Navigator.push(context,
-                      MaterialPageRoute(builder: (context)=>CommentScreen(snap:  widget.snap))),
-                      icon:Icon(Icons.comment_outlined, color: Theme.of(context).textTheme.bodyText1!.color,)
-                  ),
+                  IconButton(
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CommentScreen(snap: widget.snap))),
+                      icon: Icon(
+                        Icons.comment_outlined,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      )),
 
+                  //bookmark posts
                   Expanded(
-                      child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(onPressed: () async{
-                    await FireStoreMethods().likebookmark(widget.snap['postId'], user.uid,widget.snap['bookmark'],context);
-                  },
-                    icon: widget.snap['bookmark'].contains(user.uid)
-                        ? Icon(Icons.bookmark, color: Colors.green)
-                        : Icon(Icons.bookmark_border, color: Colors.green),
-                      )
-                  ),
+                    child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          onPressed: () async {
+                            await FireStoreMethods().likebookmark(
+                                widget.snap['postId'],
+                                user.uid,
+                                widget.snap['bookmark'],
+                                context);
+                          },
+                          icon: widget.snap['bookmark'].contains(user.uid)
+                              ? Icon(Icons.bookmark, color: Colors.green)
+                              : Icon(Icons.bookmark_border,
+                                  color: Colors.green),
+                        )),
                   )
                 ],
               ),
@@ -197,44 +234,68 @@ class _PostCardState extends State<PostCard> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: [
 
                     //No. of Likes
                     DefaultTextStyle(
-                      style: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight:FontWeight.bold),
-                      child: Text(
-                          "${widget.snap['likes'].length} likes"
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      child: Text("${widget.snap['likes'].length} likes"),
                     ),
 
                     Container(
-                      width:double.infinity,
-                      padding: EdgeInsets.only(top:8),
+                      width: double.infinity,
+                      padding: EdgeInsets.only(top: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.snap['title'],style: TextStyle(fontSize:16,fontWeight: FontWeight.bold)),
-                          Text('View Full Post',style: TextStyle(color:Colors.blue,fontSize:14,fontWeight: FontWeight.bold)),
+
+                          //Title of the post
+                          Text(widget.snap['title'],
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+
+                          //View full post
+                          Text('View Full Post',
+                              style: TextStyle(color: Colors.blue, fontSize: 14,
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
 
                     InkWell(
-                      onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>CommentScreen(snap: widget.snap,))),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CommentScreen(
+                                    snap: widget.snap,
+                                  ))),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 4),
                         child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').snapshots(),
+                          stream: FirebaseFirestore.instance
+                              .collection('posts')
+                              .doc(widget.snap['postId'])
+                              .collection('comments')
+                              .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              List<DocumentSnapshot> comments = snapshot.data!.docs;
+                              List<DocumentSnapshot> comments =
+                                  snapshot.data!.docs;
                               return InkWell(
-                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CommentScreen(snap: widget.snap))),
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CommentScreen(snap: widget.snap))),
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 4),
-                                  child: Text('View all ${comments.length} comments', style: TextStyle(fontWeight: FontWeight.w400)),
+                                  child: Text(
+                                      'View all ${comments.length} comments',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400)),
                                 ),
                               );
                             } else {
@@ -242,13 +303,11 @@ class _PostCardState extends State<PostCard> {
                             }
                           },
                         ),
-
                       ),
                     ),
                   ],
                 ),
               )
-
             ],
           ),
         ),

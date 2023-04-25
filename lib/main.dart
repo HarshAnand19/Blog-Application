@@ -1,6 +1,5 @@
 import 'package:blog_app/provider/theme_provider.dart';
 import 'package:blog_app/provider/user_provider.dart';
-import 'package:blog_app/screens/option_screen.dart';
 import 'package:blog_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

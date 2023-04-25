@@ -66,12 +66,6 @@ FirebaseAuth _auth =FirebaseAuth.instance;
                 ),
               ),
             ),
-            // IconButton(
-            //   onPressed: () {
-            //     _sharefiles();
-            //   },
-            //   icon: Icon(Icons.share),
-            // ),
 
             if(widget.id == _auth.currentUser!.uid)
               IconButton(
@@ -105,6 +99,8 @@ FirebaseAuth _auth =FirebaseAuth.instance;
              Navigator.push(context, MaterialPageRoute(builder: (context)=>
                  FullScreenImagePreview(heroTag:'imageTag' , imageUrl: widget.photo)));
               },
+
+              //Post image
               child: Hero(
                 tag: 'imageTag',
                 child: Image.network(
@@ -119,6 +115,8 @@ FirebaseAuth _auth =FirebaseAuth.instance;
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  //Post Title
                   Text(
                     widget.title,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -126,11 +124,15 @@ FirebaseAuth _auth =FirebaseAuth.instance;
                   SizedBox(height: 8),
                   Row(
                     children: [
+
+                      //Profile Picture of user
                       CircleAvatar(
                         backgroundImage: NetworkImage(widget.profImage),
                         radius: 16,
                       ),
                       SizedBox(width: 8),
+
+                      //Date & Time of user
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -141,6 +143,8 @@ FirebaseAuth _auth =FirebaseAuth.instance;
                     ],
                   ),
                   SizedBox(height: 8),
+
+                  //Description of the post
                   Text(widget.desc),
                 ],
               ),
@@ -168,16 +172,6 @@ FirebaseAuth _auth =FirebaseAuth.instance;
     )..show();
   }
 
-  // void _sharefiles() async{
-  //   String doc ="Hey! Checkout this blog, \n Title - ${widget.title}\n Description - ${widget.desc} ";
-  //   http.Response response = await http.get(Uri.parse(widget.photo));
-  //   final directory = await getTemporaryDirectory();
-  //   final path = directory.path;
-  //   final file = File('$path/image.png');
-  //   file.writeAsBytes(response.bodyBytes);
-  //   Share.shareFiles(['$path/image.png'],text: doc,);
-  //
-  // }
 
   void _showEditDialog(BuildContext context) {
     String updatedTitle = widget.title;

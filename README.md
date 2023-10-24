@@ -1,16 +1,33 @@
-# blog_app
+# Blog Application using Dart and Flutter
 
-A new Flutter project.
+This is a Blog Posting and sharing Application
 
-## Getting Started
+## Features of this project
 
-This project is a starting point for a Flutter application.
+=> Registering new users in app
+=> Logging in existing users
+=> Recovering lost passwords
+=> View and Edit User's Profile
+=> Add Blogs
+=> Comment on blogs
+=> Edit and delete a user's comments on a blog
+=> Comment on blogs using text or images
+=> Like Blogs
+=> Editing and Updating a user's blogs
+=> View all posted blogs of a user
+=> Bookmark Blogs
+=> Search for a particular Blog
+=> Implementation of Dark/Light Mode
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies and Tools Used
+For Frontend -> Dart and Flutter
+For Backend  -> Firebase
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+In this project I have used some of the features provided by Firebase for building Backend Functionaltites
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> Firebase Authentication - For handling authentication of users
+> Firebase Firestore - For storing text related data of users
+> Firebase Storage -  For storing all images of users
+> Firebase Analytics -  For measuring analytics of the application across different devices
+> Firebase Crashlytics - For measuring any crashes or bugs in the application
+
